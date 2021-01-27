@@ -1,17 +1,37 @@
 package agent;
 
+import environnement.Display;
 import environnement.Environnement;
+import environnement.Piece;
 
-public class Agent implements Runnable{
+import java.util.Queue;
 
-    Capteur capteur;
-    Actionneur actionneur;
+public abstract class Agent implements Runnable {
 
-    public Agent(Environnement environnement) {
+    protected Capteur capteur;
+    protected Actionneur actionneur;
+    protected Piece[][] carte;
+    protected int[] position = new int[2];
+
+    private Queue<Action> plan;
+
+     protected Agent(Environnement environnement){
+
+     }
+
+
+
+    private void bouger (int i, int j){
+
     }
 
-    @Override
-    public void run() {
+    private void ramasser(){}
 
-    }
+    protected abstract void planification();
+
+
+
+    private void apprentisage(){}
+
+
 }
