@@ -1,2 +1,2 @@
 # aspibot
- simulation d'un aspirateur inteligent
+ simulation d'un aspirateur intelligent
