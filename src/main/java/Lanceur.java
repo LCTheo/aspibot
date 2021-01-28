@@ -1,11 +1,10 @@
-import agent.Agent;
-import environnement.Environnement;
+import environnement.environment;
 
 public class Lanceur {
 
     public static void main(String[] args) {
 
-        Environnement env = new Environnement();
+        environment env = new environment();
        // Agent agent = new Agent(env);
 
         Thread thread_env = new Thread(env);

@@ -12,7 +12,7 @@ public class Display {
         display = new Display();
     }
 
-    public static void render(){
+    public static void render(Event event, Position position){
 
     }
 }

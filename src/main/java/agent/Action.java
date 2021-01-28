@@ -2,22 +2,35 @@ package agent;
 
 public class Action {
 
-    public static final String bouger_haut = "bouger_haut";
+    public static final Action moveHigh = new Action(1);
 
-    public static final String bouger_bas = "bouger_bas";
+    public static final Action moveDown = new Action(1);
 
-    public static final String bouger_gauche = "bouger_gauche";
+    public static final Action moveLeft = new Action(1);
 
-    public static final String bouger_droite = "bouger_droite";
+    public static final Action moveRight = new Action(1);
 
-    public static final String ramasser = "ramasser";
+    public static final Action gather = new Action(1);
 
-    public static final String nettoyer = "nettoyer";
+    public static final Action clean = new Action(1);
 
-    public static final String planification = "planification";
+    public static final Action planning = new Action(1);
 
-    public static final String apprentisage = "apprentisage";
+    public static final Action learning = new Action(1);
 
-    public static final String collecte_donne = "collecte_donne";
+    public static final Action updateState = new Action(1);
 
+    private int coef;
+
+    public Action(int coef) {
+        this.coef = coef;
+    }
+
+    public int getCoef() {
+        return coef;
+    }
+
+    public void setCoef(int coef) {
+        this.coef = coef;
+    }
 }
