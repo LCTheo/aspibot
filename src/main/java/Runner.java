@@ -1,6 +1,6 @@
 import environnement.environment;
 
-public class Lanceur {
+public class Runner {
 
     public static void main(String[] args) {
 

@@ -1,5 +1,6 @@
 package agent;
 
+import environnement.Position;
 import environnement.environment;
 
 public class Effector {
@@ -11,15 +12,15 @@ public class Effector {
     }
 
 
-    public void ramasser() {
+    public void gather() {
 
     }
 
-    public void nettoyer(){
+    public void clean(){
 
     }
 
-    public void deplacer(){
+    public void move(Position position){
 
     }
 }
