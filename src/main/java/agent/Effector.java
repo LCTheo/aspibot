@@ -12,15 +12,15 @@ public class Effector {
     }
 
 
-    public void gather() {
-
+    public void gather(Position position) {
+        environment.gather(position);
     }
 
-    public void clean(){
-
+    public void clean(Position position){
+        environment.clean(position);
     }
 
     public void move(Position position){
-
+        environment.agentMove(position);
     }
 }

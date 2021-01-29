@@ -11,15 +11,19 @@ public class Sensor {
         this.environment = environment;
     }
 
-    public Room[][] scan_environement(){
+    public Room[][] scanEnvironment(){
         return environment.getMap();
     }
 
     public int getJewelScore(){
-        return 0;
+        return environment.getJewelscore();
     }
 
     public float getDustScore(){
-        return 0;
+        return environment.getDustScore();
+    }
+
+    public int getElectricityCost(){
+        return environment.getElectricityCost();
     }
 }

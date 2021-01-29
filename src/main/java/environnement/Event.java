@@ -1,6 +1,7 @@
 package environnement;
 
 public class Event {
+    private int id;
 
     public static final Event move = new Event();
 
@@ -12,7 +13,7 @@ public class Event {
 
     public static final Event addDust = new Event();
 
-    public Event() {
+    private Event() {
 
     }
 }

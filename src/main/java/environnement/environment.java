@@ -9,6 +9,8 @@ public class environment implements Runnable{
      */
     private Room[][] map;
 
+    private Position agentPosition;
+
     /**
      * score de recolte des bijou. +1 si ramassé, -1 si aspiré.
      */
@@ -21,9 +23,13 @@ public class environment implements Runnable{
 
     private int electricityCost;
 
+
     public environment() {
     }
 
+    /**
+     * processus de l'envinonement qui génère les nouvelles poussiere et bijou
+     */
     @Override
     public void run() {
 
@@ -31,19 +37,37 @@ public class environment implements Runnable{
        // Display.render();
     }
 
-
+    /**
+     * ajoute un bijou dans l'environement
+     */
     private void addJewel(){}
 
+    /**
+     * ajoute une poussiere dans l'environement
+     */
     private void addDust(){}
 
     public Room[][] getMap() {
         return map;
     }
 
-    public void ramassage(){}
+    /**
+     * repercute l'action de ramassage sur l'environement
+     * @param position
+     */
+    public void gather(Position position){}
 
-    public void nettoyage(){}
+    /**
+     * repercute l'action de nettoyage sur l'environement
+     * @param position
+     */
+    public void clean(Position position){}
 
+    /**
+     * repercute l'action de déplacement de l'agent sur l'environement
+     * @param position
+     */
+    public void agentMove(Position position){}
 
     public int getJewelscore() {
         return Jewelscore;
@@ -56,4 +80,6 @@ public class environment implements Runnable{
     public int getElectricityCost() {
         return electricityCost;
     }
+
+
 }

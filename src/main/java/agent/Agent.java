@@ -13,6 +13,7 @@ public abstract class Agent implements Runnable {
     protected Room[][] map;
     protected Position position;
 
+
     private Queue<Action> plan;
 
     protected Agent(environment environment){
