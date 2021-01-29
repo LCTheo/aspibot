@@ -2,6 +2,9 @@ package agent;
 
 import environnement.environment;
 
+/**
+ * @theo
+ */
 public class UninformedAgent extends Agent{
 
 

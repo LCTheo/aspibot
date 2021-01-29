@@ -1,5 +1,8 @@
 package environnement;
 
+/**
+ * @henri
+ */
 public class environment implements Runnable{
 
 
@@ -21,10 +24,15 @@ public class environment implements Runnable{
      */
     private float DustScore;
 
+
     private int electricityCost;
 
-
+    /**
+     * constructeur de la classe, initialise la map et les scores,
+     * la position de départ est donné par l'agent
+     */
     public environment() {
+
     }
 
     /**
@@ -40,34 +48,47 @@ public class environment implements Runnable{
     /**
      * ajoute un bijou dans l'environement
      */
-    private void addJewel(){}
+    private void addJewel(){
+
+    }
 
     /**
      * ajoute une poussiere dans l'environement
      */
-    private void addDust(){}
+    private void addDust(){
 
-    public Room[][] getMap() {
-        return map;
     }
 
     /**
      * repercute l'action de ramassage sur l'environement
      * @param position
      */
-    public void gather(Position position){}
+    public void gather(Position position){
+
+        // Display.render();
+    }
 
     /**
      * repercute l'action de nettoyage sur l'environement
      * @param position
      */
-    public void clean(Position position){}
+    public void clean(Position position){
+
+        // Display.render();
+    }
 
     /**
      * repercute l'action de déplacement de l'agent sur l'environement
      * @param position
      */
-    public void agentMove(Position position){}
+    public void agentMove(Position position){
+
+        // Display.render();
+    }
+
+    public Room[][] getMap() {
+        return map;
+    }
 
     public int getJewelscore() {
         return Jewelscore;

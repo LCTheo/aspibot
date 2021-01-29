@@ -6,6 +6,9 @@ import environnement.Position;
 
 import java.util.Queue;
 
+/**
+ * @theo
+ */
 public abstract class Agent implements Runnable {
 
     protected Sensor sensor;
@@ -23,7 +26,6 @@ public abstract class Agent implements Runnable {
     @Override
     public void run() {
 
-        // Display.render();
     }
 
     private void move (){
