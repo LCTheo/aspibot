@@ -1,16 +1,18 @@
 package environnement;
 
+import javax.swing.*;
+import java.awt.*;
+import java.util.Random;
+
 /**
  * @henri
  */
 public class environment implements Runnable{
 
-
-
     /**
      * carte des piece avec les éléments
      */
-    private Room[][] map;
+    private final Room[][] map = new Room[5][5];
 
     private Position agentPosition;
 
@@ -33,6 +35,7 @@ public class environment implements Runnable{
      */
     public environment() {
 
+
     }
 
     /**
@@ -40,23 +43,47 @@ public class environment implements Runnable{
      */
     @Override
     public void run() {
-
-
-       // Display.render();
+        //Création du tableau de cases
+        int i = 0;
+        int j = 0;
+        while(i<5){
+            while(j<5){
+                Room room = new Room();
+                this.map[i][j] = room;
+                j++;
+            }
+            j=0;
+            i++;
+        }
+        //Ici on génère 4 poussière et 1 diamant
+        int n = 0;
+        while(n<4){
+            addDust();
+            n++;
+        }
+        addJewel();
     }
 
     /**
      * ajoute un bijou dans l'environement
      */
     private void addJewel(){
-
+         Position position = new Position();
+         position.setX((int) (Math.random()*(4-0+1)+0));
+         position.setY((int) (Math.random()*(4-0+1)+0));
+         this.map[position.getX()][position.getY()].setJewel(true);
+         Display.render(Event.addJewel, position);
     }
 
     /**
      * ajoute une poussiere dans l'environement
      */
     private void addDust(){
-
+        Position position = new Position();
+        position.setX((int) (Math.random()*(4-0+1)+0));
+        position.setY((int) (Math.random()*(4-0+1)+0));
+        this.map[position.getX()][position.getY()].setDust(true);
+        Display.render(Event.addDust, position);
     }
 
     /**
@@ -64,8 +91,10 @@ public class environment implements Runnable{
      * @param position
      */
     public void gather(Position position){
-
-        // Display.render();
+        Display.render(Event.gather, position);
+        this.map[position.getX()][position.getY()].setJewel(false);
+        this.Jewelscore++;
+        this.electricityCost++;
     }
 
     /**
@@ -73,8 +102,10 @@ public class environment implements Runnable{
      * @param position
      */
     public void clean(Position position){
-
-        // Display.render();
+        Display.render(Event.clean, position);
+        this.map[position.getX()][position.getY()].setDust(false);
+        this.DustScore++;
+        this.electricityCost++;
     }
 
     /**
@@ -83,7 +114,8 @@ public class environment implements Runnable{
      */
     public void agentMove(Position position){
 
-        // Display.render();
+        Display.render(Event.move, position);
+        this.electricityCost++;
     }
 
     public Room[][] getMap() {

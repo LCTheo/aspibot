@@ -6,6 +6,8 @@ public class Room {
     private boolean Jewel;
 
     public Room() {
+        this.dust = false;
+        this.Jewel = false;
     }
 
 
