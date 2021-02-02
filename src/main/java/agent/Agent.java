@@ -48,7 +48,7 @@ public abstract class Agent implements Runnable {
                 }
                 else if(nextAction == Action.moveDown){
 
-                    position.setX(position.getX() + 1);
+                    position.setY(position.getY() + 1);
                     effector.move(position);
                 }
                 else if(nextAction == Action.moveLeft){
@@ -56,7 +56,7 @@ public abstract class Agent implements Runnable {
                     effector.move(position);
                 }
                 else if(nextAction == Action.moveRight){
-                    position.setY(position.getY() + 1);
+                    position.setX(position.getX() + 1);
                     effector.move(position);
                 }
                 else if(nextAction == Action.moveHigh){
