@@ -3,6 +3,7 @@ package environnement;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Random;
+import java.util.Timer;
 
 /**
  * @henri
@@ -34,15 +35,6 @@ public class environment implements Runnable{
      * la position de départ est donné par l'agent
      */
     public environment() {
-
-
-    }
-
-    /**
-     * processus de l'envinonement qui génère les nouvelles poussiere et bijou
-     */
-    @Override
-    public void run() {
         //Création du tableau de cases
         int i = 0;
         int j = 0;
@@ -55,6 +47,7 @@ public class environment implements Runnable{
             j=0;
             i++;
         }
+
         //Ici on génère 4 poussière et 1 diamant
         int n = 0;
         while(n<4){
@@ -62,6 +55,35 @@ public class environment implements Runnable{
             n++;
         }
         addJewel();
+
+    }
+
+    /**
+     * processus de l'envinonement qui génère les nouvelles poussiere et bijou
+     */
+    @Override
+    public void run() {
+        while(true){
+
+            //Création d'un timer pour générer les poussières et les diamants selon une certaine fréquence
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            //Probabilité d'avoir une nouvelle poussière (1 chance sur 2)
+            double probD = Math.random();
+            if(probD>=0.5){
+                addDust();
+            }
+            //Probabilité d'avoir un nouveau bijou perdu (1 chance sur 3)
+            double probJ = Math.random();
+            if(probJ<=0.33){
+                addJewel();
+            }
+        }
+
     }
 
     /**

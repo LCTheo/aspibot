@@ -3,7 +3,9 @@ package environnement;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * @henri
@@ -19,8 +21,15 @@ public class Display {
     private static Display display = new Display();
     private JPanel panel;
     private JPanel pan_score;
-    private JPanel pan_events;
+    private JScrollPane pan_events;
     private JLabel[][] tab_labels = new JLabel[5][5];
+    private String score;
+    private String events;
+    private JLabel scorelabel;
+    private JTextArea eventlabel;
+    //private Date date =java.util.Calendar.getInstance().getTime();
+    //private LocalDateTime date = LocalDateTime.now();
+    //private long date = System.currentTimeMillis() / 1000;
 
     //Images pour le render
     private ImageIcon dust = new ImageIcon("src/main/resources/dust.png");
@@ -37,7 +46,7 @@ public class Display {
         int j = 0;
         while(i<5){
             while(j<5){
-                JLabel label = new JLabel();
+                JLabel label = new JLabel("",SwingConstants.CENTER);
                 this.tab_labels[i][j] = label;
                 label.setSize(50, 50);
                 label.setBackground(Color.gray);
@@ -54,18 +63,22 @@ public class Display {
 
         //Ajout de la case "Score"
         this.pan_score = new JPanel();
-        JLabel score = new JLabel("score");
-        score.setPreferredSize(new Dimension(100,50));
-        score.setBorder(border);
-        this.pan_score.add(score);
+        this.scorelabel = new JLabel("", SwingConstants.CENTER);
+        this.scorelabel.setPreferredSize(new Dimension(100,50));
+        this.scorelabel.setBorder(border);
+        this.pan_score.add(scorelabel);
         frame.add(this.pan_score, BorderLayout.SOUTH);
 
         //Ajout de la case "Events"
-        this.pan_events = new JPanel();
-        JLabel event = new JLabel("events");
-        event.setPreferredSize(new Dimension(200,650));
-        event.setBorder(border);
-        this.pan_events.add(event);
+
+        this.eventlabel = new JTextArea();
+        this.eventlabel.setEditable(false);
+        this.eventlabel.setPreferredSize(new Dimension(350,650));
+        this.eventlabel.setBorder(border);
+        this.pan_events = new JScrollPane(this.eventlabel);
+        this.pan_events.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        this.pan_events.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        //this.pan_events.add(this.eventlabel);
         frame.add(this.pan_events, BorderLayout.EAST);
 
         //Caractéristiques de la fenêtre
@@ -78,7 +91,7 @@ public class Display {
     }
 
     /**
-     * initialise l'affichage et lance la fenetre
+     * initialise l'affichage de l'agent
      */
     public static void init() {
         //display = new Display();
@@ -98,18 +111,39 @@ public class Display {
 
         if(event.equals(Event.addDust)){
             JLabel label = display.tab_labels[position.getX()][position.getY()];
+            display.events = display.events + "Ajout d'une poussière\t"+LocalDateTime.now()+"\n";
+            display.eventlabel.setText(display.events+"\n");
+            //Mise à jour de l'affichage
             label.setIcon(display.dust);
         } else if (event.equals(Event.addJewel)){
             JLabel label = display.tab_labels[position.getX()][position.getY()];
+            display.events = display.events + "Ajout d'un diamant\t"+LocalDateTime.now()+"\n";
+            display.eventlabel.setText(display.events+"\n");
+            //Mise à jour de l'affichage
             label.setIcon(display.jewel);
         } else if (event.equals(Event.gather)){
             JLabel label = display.tab_labels[position.getX()][position.getY()];
+            display.events = display.events + "Récupération d'un diamant\t"+LocalDateTime.now()+"\n";
+            display.eventlabel.setText(display.events+"\n");
+            //Mise à jour du score
+            display.score = display.score + "1";
+            display.scorelabel.setText(display.score);
+            //Mise à jour de l'affichage
             label.setIcon(null);
         } else if (event.equals(Event.clean)){
             JLabel label = display.tab_labels[position.getX()][position.getY()];
+            display.events = display.events + "Nettoyage d'une poussière\t"+LocalDateTime.now()+"\n";
+            display.eventlabel.setText(display.events+"\n");
+            //Mise à jour du score
+            display.score = display.score + "1";
+            display.scorelabel.setText(display.score+"\n");
+            //Mise à jour de l'affichage
             label.setIcon(null);
         } else if (event.equals(Event.move)){
             JLabel label = display.tab_labels[position.getX()][position.getY()];
+            display.events = display.events + "Déplacement de l'agent\t"+LocalDateTime.now()+"\n";
+            display.eventlabel.setText(display.events+"\n");
+            //Mise à jour de l'affichage
             label.setIcon(display.vacuum);
         }
 
