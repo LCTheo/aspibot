@@ -2,6 +2,7 @@ package environnement;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class Display {
     private JPanel pan_score;
     private JScrollPane pan_events;
     private JLabel[][] tab_labels = new JLabel[5][5];
-    private String score;
+    private int score;
     private String events;
     private JLabel scorelabel;
     private JTextArea eventlabel;
@@ -70,15 +71,17 @@ public class Display {
         frame.add(this.pan_score, BorderLayout.SOUTH);
 
         //Ajout de la case "Events"
-
         this.eventlabel = new JTextArea();
         this.eventlabel.setEditable(false);
-        this.eventlabel.setPreferredSize(new Dimension(350,650));
+
         this.eventlabel.setBorder(border);
         this.pan_events = new JScrollPane(this.eventlabel);
-        this.pan_events.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        this.pan_events.setPreferredSize(new Dimension(360,650));
+        //Autoscroll pour les events
+        DefaultCaret caret = (DefaultCaret)this.eventlabel.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+        //this.pan_events.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         this.pan_events.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        //this.pan_events.add(this.eventlabel);
         frame.add(this.pan_events, BorderLayout.EAST);
 
         //Caractéristiques de la fenêtre
@@ -111,38 +114,38 @@ public class Display {
 
         if(event.equals(Event.addDust)){
             JLabel label = display.tab_labels[position.getX()][position.getY()];
-            display.events = display.events + "Ajout d'une poussière\t"+LocalDateTime.now()+"\n";
-            display.eventlabel.setText(display.events+"\n");
+            //Affichage de l'évènement
+            display.eventlabel.append("Ajout d'une poussière\t"+LocalDateTime.now()+"\n");
             //Mise à jour de l'affichage
             label.setIcon(display.dust);
         } else if (event.equals(Event.addJewel)){
             JLabel label = display.tab_labels[position.getX()][position.getY()];
-            display.events = display.events + "Ajout d'un diamant\t"+LocalDateTime.now()+"\n";
-            display.eventlabel.setText(display.events+"\n");
+            //Affichage de l'évènement
+            display.eventlabel.append("Ajout d'un diamant\t"+LocalDateTime.now()+"\n");
             //Mise à jour de l'affichage
             label.setIcon(display.jewel);
         } else if (event.equals(Event.gather)){
             JLabel label = display.tab_labels[position.getX()][position.getY()];
-            display.events = display.events + "Récupération d'un diamant\t"+LocalDateTime.now()+"\n";
-            display.eventlabel.setText(display.events+"\n");
+            //Affichage de l'évènement
+            display.eventlabel.append("Récupération d'un diamant\t"+LocalDateTime.now()+"\n");
             //Mise à jour du score
-            display.score = display.score + "1";
-            display.scorelabel.setText(display.score);
+            display.score++;
+            display.scorelabel.setText(Integer.toString(display.score));
             //Mise à jour de l'affichage
             label.setIcon(null);
         } else if (event.equals(Event.clean)){
             JLabel label = display.tab_labels[position.getX()][position.getY()];
-            display.events = display.events + "Nettoyage d'une poussière\t"+LocalDateTime.now()+"\n";
-            display.eventlabel.setText(display.events+"\n");
+            //Affichage de l'évènement
+            display.eventlabel.append("Nettoyage d'une poussière\t"+LocalDateTime.now()+"\n");
             //Mise à jour du score
-            display.score = display.score + "1";
-            display.scorelabel.setText(display.score+"\n");
+            display.score++;
+            display.scorelabel.setText(Integer.toString(display.score));
             //Mise à jour de l'affichage
             label.setIcon(null);
         } else if (event.equals(Event.move)){
             JLabel label = display.tab_labels[position.getX()][position.getY()];
-            display.events = display.events + "Déplacement de l'agent\t"+LocalDateTime.now()+"\n";
-            display.eventlabel.setText(display.events+"\n");
+            //Affichage de l'évènement
+            display.eventlabel.append("Déplacement de l'agent\t"+LocalDateTime.now()+"\n");
             //Mise à jour de l'affichage
             label.setIcon(display.vacuum);
         }
