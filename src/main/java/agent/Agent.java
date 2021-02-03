@@ -4,8 +4,8 @@ import environnement.environment;
 import environnement.Room;
 import environnement.Position;
 
+import java.util.Deque;
 import java.util.LinkedList;
-import java.util.Queue;
 
 /**
  * @theo
@@ -16,8 +16,8 @@ public abstract class Agent implements Runnable {
     protected Effector effector;
     protected Room[][] map;
     protected Position position;
-    protected Position goal;
-    protected Queue<Action> plan;
+    protected Room[][] goal;
+    protected Deque<Action> plan;
 
     protected Agent(environment environment){
         sensor = new Sensor(environment);
@@ -30,6 +30,18 @@ public abstract class Agent implements Runnable {
         effector.move(position);
 
         plan = new LinkedList<>();
+        goal = new Room[5][5];
+        int i = 0;
+        int j = 0;
+        while (i < 5){
+            while (j < 5){
+                goal[i][j] = new Room();
+                j++;
+            }
+            j = 0;
+            i++;
+        }
+
     }
 
     @Override
@@ -39,36 +51,26 @@ public abstract class Agent implements Runnable {
                 Action nextAction = plan.poll();
                 if(nextAction == Action.gather){
                     effector.gather(position);
-                    map[position.getX()][position.getY()].setJewel(false);
                 }
                 else if(nextAction == Action.clean){
                     effector.clean(position);
-                    map[position.getX()][position.getY()].setDust(false);
-                    map[position.getX()][position.getY()].setJewel(false);
                 }
                 else if(nextAction == Action.moveDown){
-
-                    position.setY(position.getY() + 1);
                     effector.move(position);
                 }
                 else if(nextAction == Action.moveLeft){
-                    position.setX(position.getX() - 1);
                     effector.move(position);
                 }
                 else if(nextAction == Action.moveRight){
-                    position.setX(position.getX() + 1);
                     effector.move(position);
                 }
                 else if(nextAction == Action.moveHigh){
-                    position.setY(position.getY() - 1);
                     effector.move(position);
                 }
             }
             else {
-                planning();
-            }
-            if ((position.getX() == goal.getX() && position.getY() == goal.getY()) && !map[goal.getX()][goal.getY()].isDust()){
-                goal = selectGoal();
+                updateState();
+                plan = planning();
             }
         }
     }
@@ -81,9 +83,5 @@ public abstract class Agent implements Runnable {
 
     }
 
-    protected Position selectGoal(){
-        return new Position(1, 3);
-    }
-
-    protected abstract void planning();
+    protected abstract Deque<Action> planning();
 }

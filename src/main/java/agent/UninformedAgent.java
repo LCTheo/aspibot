@@ -2,6 +2,8 @@ package agent;
 
 import environnement.environment;
 
+import java.util.Deque;
+
 /**
  * @theo
  */
@@ -13,8 +15,9 @@ public class UninformedAgent extends Agent{
     }
 
     @Override
-    protected void planning() {
+    protected Deque<Action> planning() {
 
+        return null;
     }
 
 }
