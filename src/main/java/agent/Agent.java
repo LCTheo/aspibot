@@ -14,8 +14,7 @@ public abstract class Agent implements Runnable {
 
     protected Sensor sensor;
     protected Effector effector;
-    protected Room[][] map;
-    protected Position position;
+    protected State state;
     protected Room[][] goal;
     protected Deque<Action> plan;
 
@@ -26,8 +25,8 @@ public abstract class Agent implements Runnable {
 
         int x = (int) (Math.random()*4);
         int y = (int) (Math.random()*4);
-        position = new Position(x, y);
-        effector.move(position);
+        state = new State(updateState(), new Position(x, y));
+        effector.move(state.getAgentPosition());
 
         plan = new LinkedList<>();
         goal = new Room[5][5];
@@ -50,22 +49,22 @@ public abstract class Agent implements Runnable {
             if (!plan.isEmpty()){
                 Action nextAction = plan.poll();
                 if(nextAction == Action.gather){
-                    effector.gather(position);
+                    effector.gather(state.getAgentPosition());
                 }
                 else if(nextAction == Action.clean){
-                    effector.clean(position);
+                    effector.clean(state.getAgentPosition());
                 }
                 else if(nextAction == Action.moveDown){
-                    effector.move(position);
+                    effector.move(state.getAgentPosition());
                 }
                 else if(nextAction == Action.moveLeft){
-                    effector.move(position);
+                    effector.move(state.getAgentPosition());
                 }
                 else if(nextAction == Action.moveRight){
-                    effector.move(position);
+                    effector.move(state.getAgentPosition());
                 }
                 else if(nextAction == Action.moveHigh){
-                    effector.move(position);
+                    effector.move(state.getAgentPosition());
                 }
             }
             else {
@@ -75,8 +74,8 @@ public abstract class Agent implements Runnable {
         }
     }
 
-    private void updateState(){
-        map = sensor.scanEnvironment();
+    private Room[][] updateState(){
+        return sensor.scanEnvironment();
     }
 
     private void learning(){
