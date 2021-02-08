@@ -135,7 +135,7 @@ public class environment implements Runnable{
      * @param position
      */
     public void agentMove(Position position){
-
+        this.agentPosition = position;
         Display.render(Event.move, position);
         this.electricityCost++;
     }
