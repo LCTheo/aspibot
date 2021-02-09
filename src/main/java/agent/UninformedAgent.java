@@ -34,8 +34,13 @@ public class UninformedAgent extends Agent{
             }
         }
         Deque<Action> path = new LinkedList<>();
+        Node currentNode = solution;
 
-        return null;
+        while (currentNode != null){
+            path.add(currentNode.getAction());
+            currentNode = currentNode.getParent();
+        }
+        return path;
     }
 
     private Node recursive_DLS(Node state, Room[][] goal, int limit) throws Exception{
