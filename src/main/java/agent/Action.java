@@ -14,23 +14,21 @@ public class Action {
 
     public static final Action clean = new Action(1);
 
-    public static final Action planning = new Action(1);
+    private int priority;
 
-    public static final Action learning = new Action(1);
-
-    public static final Action updateState = new Action(1);
-
-    private int coef;
-
-    public Action(int coef) {
-        this.coef = coef;
+    public Action(int priority) {
+        this.priority = priority;
     }
 
-    public int getCoef() {
-        return coef;
+    public int getPriority() {
+        return priority;
     }
 
-    public void setCoef(int coef) {
-        this.coef = coef;
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
+
+    public boolean morePriorityThan(Action action){
+        return this.priority > action.getPriority();
     }
 }
