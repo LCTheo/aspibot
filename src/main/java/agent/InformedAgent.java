@@ -1,6 +1,11 @@
 package agent;
 
+import environnement.Room;
 import environnement.environment;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.Deque;
+import java.util.List;
 
 public class InformedAgent extends Agent{
 
@@ -9,8 +14,24 @@ public class InformedAgent extends Agent{
     }
 
     @Override
-    protected void planning() {
+    protected List<Node> expend(Node parent, Room[][] goal) {
+        return null;
+    }
 
+    @Override
+    protected int stepCost(Node parent, Action action, Node node) {
+        return 0;
+    }
+
+    @Override
+    protected List<Pair<Action, State>> successorFn(Room[][] goal, State lastState) {
+        return null;
+    }
+
+    @Override
+    protected Deque<Action> planning() {
+
+        return null;
     }
 
 
