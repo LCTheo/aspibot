@@ -13,6 +13,8 @@ public class Event {
 
     public static final Event addDust = new Event();
 
+    public static final Event initpos = new Event();
+
     private Event() {
 
     }

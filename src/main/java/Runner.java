@@ -15,6 +15,6 @@ public class Runner {
 
         thread_env.start();
         thread_agent.start();
-        Display.init();
+        Display.init(env);
     }
 }

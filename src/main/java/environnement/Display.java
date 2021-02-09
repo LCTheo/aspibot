@@ -12,7 +12,7 @@ import java.util.Date;
  * @henri
  * classe permettant l'affichage de l'environement et de l'agent pour suivre les actions réalisé.
  * des indicateurs comme les scores de poussiere et bijoux seront aussi affichés
- * seul l'environement fait appel a display
+ * seul l'environnement fait appel a display
  * d'autres methodes peuvent etre créées si besoin
  * pour tester le déplacement de l'agent tu peux le faire bouger arbitraiaremnt en appelant agentMove dans agent.run
  *  pour une représentation photoréaliste cf src/main/ressources/ui.png
@@ -23,7 +23,7 @@ public class Display {
     private JPanel panel;
     private JPanel pan_score;
     private JScrollPane pan_events;
-    private JLabel[][] tab_labels = new JLabel[5][5];
+    private JPanel[][] tab_panels = new JPanel[5][5];
     private int score;
     private String events;
     private JLabel scorelabel;
@@ -47,12 +47,18 @@ public class Display {
         int j = 0;
         while(i<5){
             while(j<5){
-                JLabel label = new JLabel("",SwingConstants.CENTER);
-                this.tab_labels[i][j] = label;
-                label.setSize(50, 50);
-                label.setBackground(Color.gray);
-                label.setBorder(border);
-                this.panel.add(label);
+                JPanel panel = new JPanel();
+                JLabel label1 = new JLabel("", JLabel.CENTER);
+                JLabel label2 = new JLabel("", JLabel.CENTER);
+                JLabel label3 = new JLabel("", JLabel.CENTER);
+                panel.add(label1);
+                panel.add(label2);
+                panel.add(label3);
+                this.tab_panels[i][j] = panel;
+                panel.setSize(50, 50);
+                panel.setBackground(Color.gray);
+                panel.setBorder(border);
+                this.panel.add(panel);
                 j++;
             }
             j=0;
@@ -96,12 +102,8 @@ public class Display {
     /**
      * initialise l'affichage de l'agent
      */
-    public static void init() {
-        //display = new Display();
-
-        //Génération de l'aspibot sur une case aléatoire
-        JLabel label = display.tab_labels[(int) (Math.random()*(4-0+1)+0)][(int) (Math.random()*(4-0+1)+0)];
-        label.setIcon(display.vacuum);
+    public static void init(environment environment) {
+       display.render(Event.initpos,environment.getAgentPosition());
 
     }
 
@@ -111,42 +113,53 @@ public class Display {
      * @param position
      */
     public static void render(Event event, Position position){
-
-        if(event.equals(Event.addDust)){
-            JLabel label = display.tab_labels[position.getX()][position.getY()];
+        if(event.equals(Event.initpos)){
+            JPanel panel = display.tab_panels[position.getX()][position.getY()];
             //Affichage de l'évènement
-            display.eventlabel.append("Ajout d'une poussière\t"+LocalDateTime.now()+"\n");
+            display.eventlabel.append("Initialisation de l'agent en: \t"+position.getX()+", "+position.getY()+"\n");
             //Mise à jour de l'affichage
+            JLabel label = (JLabel) panel.getComponent(2);
+            label.setIcon(display.vacuum);
+        } else if(event.equals(Event.addDust)){
+            JPanel panel = display.tab_panels[position.getX()][position.getY()];
+            //Affichage de l'évènement
+            display.eventlabel.append("Ajout d'une poussière en : \t"+position.getX()+", "+position.getY()+"\n");
+            //Mise à jour de l'affichage
+            JLabel label = (JLabel) panel.getComponent(0);
             label.setIcon(display.dust);
         } else if (event.equals(Event.addJewel)){
-            JLabel label = display.tab_labels[position.getX()][position.getY()];
+            JPanel panel = display.tab_panels[position.getX()][position.getY()];
             //Affichage de l'évènement
-            display.eventlabel.append("Ajout d'un diamant\t"+LocalDateTime.now()+"\n");
+            display.eventlabel.append("Ajout d'un diamant en: \t"+position.getX()+", "+position.getY()+"\n");
             //Mise à jour de l'affichage
+            JLabel label = (JLabel) panel.getComponent(1);
             label.setIcon(display.jewel);
         } else if (event.equals(Event.gather)){
-            JLabel label = display.tab_labels[position.getX()][position.getY()];
+            JPanel panel = display.tab_panels[position.getX()][position.getY()];
             //Affichage de l'évènement
-            display.eventlabel.append("Récupération d'un diamant\t"+LocalDateTime.now()+"\n");
+            display.eventlabel.append("Récupération d'un diamant en: \t"+position.getX()+", "+position.getY()+"\n");
             //Mise à jour du score
             display.score++;
             display.scorelabel.setText(Integer.toString(display.score));
             //Mise à jour de l'affichage
+            JLabel label = (JLabel) panel.getComponent(1);
             label.setIcon(null);
         } else if (event.equals(Event.clean)){
-            JLabel label = display.tab_labels[position.getX()][position.getY()];
+            JPanel panel = display.tab_panels[position.getX()][position.getY()];
             //Affichage de l'évènement
-            display.eventlabel.append("Nettoyage d'une poussière\t"+LocalDateTime.now()+"\n");
+            display.eventlabel.append("Nettoyage d'une poussière en: \t"+position.getX()+", "+position.getY()+"\n");
             //Mise à jour du score
             display.score++;
             display.scorelabel.setText(Integer.toString(display.score));
             //Mise à jour de l'affichage
+            JLabel label = (JLabel) panel.getComponent(0);
             label.setIcon(null);
         } else if (event.equals(Event.move)){
-            JLabel label = display.tab_labels[position.getX()][position.getY()];
+            JPanel panel = display.tab_panels[position.getX()][position.getY()];
             //Affichage de l'évènement
-            display.eventlabel.append("Déplacement de l'agent\t"+LocalDateTime.now()+"\n");
+            display.eventlabel.append("Déplacement de l'agent en: \t"+position.getX()+", "+position.getY()+"\n");
             //Mise à jour de l'affichage
+            JLabel label = (JLabel) panel.getComponent(2);
             label.setIcon(display.vacuum);
         }
 
