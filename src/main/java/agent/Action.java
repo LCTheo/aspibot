@@ -27,4 +27,8 @@ public class Action {
     public void setPriority(int priority) {
         this.priority = priority;
     }
+
+    public boolean morePriorityThan(Action action){
+        return this.priority > action.getPriority();
+    }
 }

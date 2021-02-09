@@ -40,7 +40,7 @@ public class UninformedAgent extends Agent{
 
     private Node recursive_DLS(Node state, Room[][] goal, int limit) throws Exception{
         boolean cutoff = false;
-        if (goalTest(goal, state.getState())){
+        if (goalTest(state.getState())){
             return state;
         }
         else if(state.getDepth() == limit){
@@ -67,7 +67,7 @@ public class UninformedAgent extends Agent{
         }
     }
 
-    private List<Node> expend(Node parent, Room[][] goal){
+    protected List<Node> expend(Node parent, Room[][] goal){
         List<Node> successors = new ArrayList<>();
 
         for (Pair<Action, State> nextState: successorFn(goal, parent.getState())){
@@ -77,16 +77,25 @@ public class UninformedAgent extends Agent{
             s.setState(nextState.getRight());
             s.setPathCost(parent.getPathCost() + stepCost(parent, nextState.getLeft(), s));
             s.setDepth(parent.getDepth() + 1);
-            successors.add(s);
+            int i = 0;
+            if (successors.isEmpty()){
+                successors.add(s);
+            }
+            else {
+                while (successors.get(i).getAction().morePriorityThan(s.getAction()) && i < successors.size()){
+                    i++;
+                }
+                successors.add(i, s);
+            }
         }
         return successors;
     }
 
-    private int stepCost(Node parent, Action action, Node node) {
+    protected int stepCost(Node parent, Action action, Node node) {
         return 1;
     }
 
-    private List<Pair<Action, State>> successorFn(Room[][] goal, State lastState){
+    protected List<Pair<Action, State>> successorFn(Room[][] goal, State lastState){
         List<Pair<Action, State>> successors = new ArrayList<>();
 
         if(lastState.getAgentPosition().getX()<4){
@@ -125,19 +134,4 @@ public class UninformedAgent extends Agent{
         return successors;
     }
 
-    private boolean goalTest(Room[][] goal, State state){
-        int i = 0;
-        int j = 0;
-        while (i< 5){
-            while (j< 5){
-                if ((goal[i][j].isDust() != state.getMap()[i][j].isDust()) || goal[i][j].isJewel() != state.getMap()[i][j].isJewel() ){
-                    return false;
-                }
-                j++;
-            }
-            j = 0;
-            i++;
-        }
-        return true;
-    }
 }

@@ -3,9 +3,11 @@ package agent;
 import environnement.environment;
 import environnement.Room;
 import environnement.Position;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @theo
@@ -78,9 +80,31 @@ public abstract class Agent implements Runnable {
         return sensor.scanEnvironment();
     }
 
+    protected boolean goalTest(State state){
+        int i = 0;
+        int j = 0;
+        while (i< 5){
+            while (j< 5){
+                if (state.getMap()[i][j].isDust()){
+                    return false;
+                }
+                j++;
+            }
+            j = 0;
+            i++;
+        }
+        return true;
+    }
+
+
     private void learning(){
 
     }
+    protected abstract List<Node> expend(Node parent, Room[][] goal);
+
+    protected abstract int stepCost(Node parent, Action action, Node node);
+
+    protected abstract List<Pair<Action, State>> successorFn(Room[][] goal, State lastState);
 
     protected abstract Deque<Action> planning();
 }
