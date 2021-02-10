@@ -11,19 +11,19 @@ import java.util.Timer;
 public class environment implements Runnable{
 
     /**
-     * carte des piece avec les éléments
+     * carte des pieces avec les éléments
      */
     private final Room[][] map = new Room[5][5];
 
     private Position agentPosition;
 
     /**
-     * score de recolte des bijou. +1 si ramassé, -1 si aspiré.
+     * score de recolte des bijoux. +1 si ramassé, -1 si aspiré.
      */
     private int Jewelscore;
 
     /**
-     * score de ramassage, = poussiere_ramassé/poussire_total
+     * score de ramassage, = poussiere_ramassé/poussiere_total
      */
     private float DustScore;
 
@@ -59,7 +59,7 @@ public class environment implements Runnable{
     }
 
     /**
-     * processus de l'envinonement qui génère les nouvelles poussiere et bijou
+     * processus de l'environnement qui génère les nouvelles poussieres et bijoux
      */
     @Override
     public void run() {
@@ -87,7 +87,7 @@ public class environment implements Runnable{
     }
 
     /**
-     * ajoute un bijou dans l'environement
+     * ajoute un bijou dans l'environnement
      */
     private void addJewel(){
          Position position = new Position();
@@ -98,7 +98,7 @@ public class environment implements Runnable{
     }
 
     /**
-     * ajoute une poussiere dans l'environement
+     * ajoute une poussiere dans l'environnement
      */
     private void addDust(){
         Position position = new Position();
@@ -109,7 +109,7 @@ public class environment implements Runnable{
     }
 
     /**
-     * repercute l'action de ramassage sur l'environement
+     * repercute l'action de ramassage sur l'environnement
      * @param position
      */
     public void gather(Position position){
@@ -120,7 +120,7 @@ public class environment implements Runnable{
     }
 
     /**
-     * repercute l'action de nettoyage sur l'environement
+     * repercute l'action de nettoyage sur l'environnement
      * @param position
      */
     public void clean(Position position){
@@ -131,7 +131,7 @@ public class environment implements Runnable{
     }
 
     /**
-     * repercute l'action de déplacement de l'agent sur l'environement
+     * repercute l'action de déplacement de l'agent sur l'environnement
      * @param position
      */
     public void agentMove(Position position){
@@ -154,6 +154,10 @@ public class environment implements Runnable{
 
     public int getElectricityCost() {
         return electricityCost;
+    }
+
+    public Position getAgentPosition(){
+        return this.agentPosition;
     }
 
 
