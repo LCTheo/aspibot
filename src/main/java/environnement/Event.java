@@ -25,6 +25,9 @@ public class Event {
     
     //Evenement d'initialisation de la position de l'agent
     public static final Event initpos = new Event();
+    
+    //Evenement pour supprimer la position de l'agent sur une case donnée
+    public static final Event delBot = new Event();
 
     /**
     * Constructeur vide de la classe Event
