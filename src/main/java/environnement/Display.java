@@ -110,6 +110,7 @@ public class Display {
 
     /**
      * Initialise l'affichage de l'agent
+     * @param environmnet : instance de l'environnement pour récupérer la position initiale donnée par l'agent
      */
     public static void init(environment environment) {
        display.render(Event.initpos,environment.getAgentPosition());
