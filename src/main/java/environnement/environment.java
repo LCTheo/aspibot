@@ -16,11 +16,9 @@ public class environment implements Runnable{
     
     // Position de l'agent
     private Position agentPosition;
-
     
     //Score de recolte des bijoux. +1 si ramassé, -1 si aspiré. 
     private int Jewelscore;
-
     
     //Score de ramassage, = poussiere_ramassé/poussiere_total
     private float DustScore;
@@ -145,10 +143,13 @@ public class environment implements Runnable{
      * @param position : position à laquelle l'évènement se produit
      */
     public void agentMove(Position position){
+        //Mise à jour grapgique pour supprimer l'agent de sa case précédente
+        Display.render(Event.delBot, this.position)
         //Mise à jour de l'environnement
         this.agentPosition = position;
         //Mise à jour graphique
         Display.render(Event.move, position);
+        
         this.electricityCost++;
     }
 
