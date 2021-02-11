@@ -14,7 +14,7 @@ public class InformedAgent extends Agent{
     }
 
     @Override
-    protected List<Node> expend(Node parent, Room[][] goal) {
+    protected List<Node> expend(Node parent) {
         return null;
     }
 
@@ -24,7 +24,7 @@ public class InformedAgent extends Agent{
     }
 
     @Override
-    protected List<Pair<Action, State>> successorFn(Room[][] goal, State lastState) {
+    protected List<Pair<Action, State>> successorFn(State lastState) {
         return null;
     }
 

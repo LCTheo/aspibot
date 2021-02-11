@@ -90,9 +90,9 @@ public class environment implements Runnable{
      * ajoute un bijou dans l'environnement
      */
     private void addJewel(){
-         Position position = new Position();
-         position.setX((int) (Math.random()*(4-0+1)+0));
-         position.setY((int) (Math.random()*(4-0+1)+0));
+         int x = (int) (Math.random()*(4-0+1)+0);
+         int y = (int) (Math.random()*(4-0+1)+0);
+         Position position = new Position(x, y);
          this.map[position.getX()][position.getY()].setJewel(true);
          Display.render(Event.addJewel, position);
     }
@@ -101,9 +101,9 @@ public class environment implements Runnable{
      * ajoute une poussiere dans l'environnement
      */
     private void addDust(){
-        Position position = new Position();
-        position.setX((int) (Math.random()*(4-0+1)+0));
-        position.setY((int) (Math.random()*(4-0+1)+0));
+        int x = (int) (Math.random()*(4-0+1)+0);
+        int y = (int) (Math.random()*(4-0+1)+0);
+        Position position = new Position(x, y);
         this.map[position.getX()][position.getY()].setDust(true);
         Display.render(Event.addDust, position);
     }

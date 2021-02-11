@@ -8,7 +8,7 @@ public class Runner {
     public static void main(String[] args) {
 
         environment env = new environment();
-       Agent agent = new UninformedAgent(env);
+        Agent agent = new UninformedAgent(env);
 
         Thread thread_env = new Thread(env);
         Thread thread_agent = new Thread(agent);
