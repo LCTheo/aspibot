@@ -169,6 +169,14 @@ public class Display {
             //Mise à jour de l'affichage
             JLabel label = (JLabel) panel.getComponent(0);
             label.setIcon(null);
+            //Evenement pour supprimer la position de l'agent sur une case donnée        
+        } else if (event.equals(Event.delBot)){
+            JPanel panel = display.tab_panels[position.getX()][position.getY()];
+            //Affichage de l'évènement
+            display.eventlabel.append("Suppression de l'agent en: \t"+position.getX()+", "+position.getY()+"\n");
+            //Mise à jour de l'affichage
+            JLabel label = (JLabel) panel.getComponent(2);
+            label.setIcon(null);
             //Evenement de déplacement de l'agent
         } else if (event.equals(Event.move)){
             JPanel panel = display.tab_panels[position.getX()][position.getY()];
