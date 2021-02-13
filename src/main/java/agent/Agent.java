@@ -17,39 +17,28 @@ public abstract class Agent implements Runnable {
     protected Sensor sensor;
     protected Effector effector;
     protected State state;
-    protected Room[][] goal;
     protected Deque<Action> plan;
 
     protected Agent(environment environment){
         sensor = new Sensor(environment);
         effector = new Effector(environment);
-        updateState();
 
         int x = (int) (Math.random()*4);
         int y = (int) (Math.random()*4);
         state = new State(updateState(), new Position(x, y));
+        state.printMap();
+        System.out.println("position :" + state.getAgentPosition().getX() +", "+state.getAgentPosition().getY());
         effector.move(state.getAgentPosition());
 
         plan = new LinkedList<>();
-        goal = new Room[5][5];
-        int i = 0;
-        int j = 0;
-        while (i < 5){
-            while (j < 5){
-                goal[i][j] = new Room();
-                j++;
-            }
-            j = 0;
-            i++;
-        }
-
     }
 
     @Override
     public void run() {
         while (true){
             if (!plan.isEmpty()){
-                Action nextAction = plan.poll();
+                Action nextAction = plan.pop();
+                System.out.println("action : "+nextAction.getName());
                 if(nextAction == Action.gather){
                     effector.gather(state.getAgentPosition());
                 }
@@ -57,20 +46,29 @@ public abstract class Agent implements Runnable {
                     effector.clean(state.getAgentPosition());
                 }
                 else if(nextAction == Action.moveDown){
+                    state.setAgentPosition(state.getAgentPosition().getX(),state.getAgentPosition().getY()-1);
                     effector.move(state.getAgentPosition());
                 }
                 else if(nextAction == Action.moveLeft){
+                    state.setAgentPosition(state.getAgentPosition().getX()-1,state.getAgentPosition().getY());
                     effector.move(state.getAgentPosition());
                 }
                 else if(nextAction == Action.moveRight){
+                    state.setAgentPosition(state.getAgentPosition().getX()+1,state.getAgentPosition().getY());
                     effector.move(state.getAgentPosition());
                 }
                 else if(nextAction == Action.moveHigh){
+                    state.setAgentPosition(state.getAgentPosition().getX(),state.getAgentPosition().getY()+1);
                     effector.move(state.getAgentPosition());
+                }
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
             else {
-                updateState();
+                state.setMap(updateState());
                 plan = planning();
             }
         }
@@ -100,11 +98,11 @@ public abstract class Agent implements Runnable {
     private void learning(){
 
     }
-    protected abstract List<Node> expend(Node parent, Room[][] goal);
+    protected abstract List<Node> expend(Node parent);
 
     protected abstract int stepCost(Node parent, Action action, Node node);
 
-    protected abstract List<Pair<Action, State>> successorFn(Room[][] goal, State lastState);
+    protected abstract List<Pair<Action, State>> successorFn(State lastState);
 
     protected abstract Deque<Action> planning();
 }

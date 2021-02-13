@@ -87,10 +87,10 @@ public class environment implements Runnable{
      * Met à jour l'affichage graphique avec l'appel à Display.Render(Event, Position)
      */
     private void addJewel(){
-         Position position = new Position();
-         position.setX((int) (Math.random()*(4-0+1)+0));
-         position.setY((int) (Math.random()*(4-0+1)+0));
-        //Mise à jour de l'environnement
+         int x = (int) (Math.random()*(4-0+1)+0);
+         int y = (int) (Math.random()*(4-0+1)+0);
+         Position position = new Position(x, y);
+      
          this.map[position.getX()][position.getY()].setJewel(true);
         //Mise à jour graphique
          Display.render(Event.addJewel, position);
@@ -101,10 +101,10 @@ public class environment implements Runnable{
      * Met à jour l'affichage graphique avec l'appel à Display.Render(Event, Position)
      */
     private void addDust(){
-        Position position = new Position();
-        position.setX((int) (Math.random()*(4-0+1)+0));
-        position.setY((int) (Math.random()*(4-0+1)+0));
-        //Mise à jour de l'environnement
+        int x = (int) (Math.random()*(4-0+1)+0);
+        int y = (int) (Math.random()*(4-0+1)+0);
+        Position position = new Position(x, y);
+      
         this.map[position.getX()][position.getY()].setDust(true);
         //Mise à jour graphique
         Display.render(Event.addDust, position);
