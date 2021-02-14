@@ -18,6 +18,8 @@ public abstract class Agent implements Runnable {
     protected Effector effector;
     protected State state;
     protected Deque<Action> plan;
+    protected int updateDecompte;
+    protected int baseDecompte;
 
     protected Agent(environment environment){
         sensor = new Sensor(environment);
@@ -31,17 +33,25 @@ public abstract class Agent implements Runnable {
         effector.move(state.getAgentPosition());
 
         plan = new LinkedList<>();
+        updateDecompte = 20;
+        baseDecompte = 20;
     }
 
     @Override
     public void run() {
         while (true){
+            updateDecompte = updateDecompte -1;
             if (!plan.isEmpty()){
                 Action nextAction = plan.pop();
                 if(nextAction == Action.gather){
+                    Room room = new Room();
+                    room.setDust(state.getRoom(state.getAgentPosition().getX(),state.getAgentPosition().getY()).isDust());
+                    state.updateRoom(state.getAgentPosition().getX(),state.getAgentPosition().getY(),room);
                     effector.gather(state.getAgentPosition());
                 }
                 else if(nextAction == Action.clean){
+                    Room room = new Room();
+                    state.updateRoom(state.getAgentPosition().getX(),state.getAgentPosition().getY(),room);
                     effector.clean(state.getAgentPosition());
                 }
                 else if(nextAction == Action.moveDown){
@@ -60,6 +70,7 @@ public abstract class Agent implements Runnable {
                     state.setAgentPosition(state.getAgentPosition().getX(),state.getAgentPosition().getY()-1);
                     effector.move(state.getAgentPosition());
                 }
+
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
@@ -67,8 +78,11 @@ public abstract class Agent implements Runnable {
                 }
             }
             else {
-                updateState();
                 plan = planning();
+            }
+            if (updateDecompte == 0){
+                updateDecompte = baseDecompte;
+                updateState();
             }
         }
     }
@@ -92,7 +106,7 @@ public abstract class Agent implements Runnable {
         int j = 0;
         while (i< 5){
             while (j< 5){
-                if (state.getMap()[i][j].isDust()){
+                if (state.getMap()[i][j].isDust() || state.getMap()[i][j].isJewel()){
                     return false;
                 }
                 j++;
