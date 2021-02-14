@@ -120,7 +120,7 @@ public class Display {
      * @param environment : instance de l'environnement pour récupérer la position initiale donnée par l'agent
      */
     public static void init(environment environment) {
-       render(Event.initpos,environment.getAgentPosition());
+       render(Event.initpos, environment.getAgentPosition());
 
     }
 

@@ -26,9 +26,10 @@ public abstract class Agent implements Runnable {
         int x = (int) (Math.random()*4);
         int y = (int) (Math.random()*4);
         state = new State(sensor.scanEnvironment(), new Position(x, y));
+        //environment.setAgentPosition(new Position(x,y));
         state.printMap();
         System.out.println("position :" + state.getAgentPosition().getX() +", "+state.getAgentPosition().getY());
-        effector.move(state.getAgentPosition());
+        effector.move(state.getAgentPosition(), 0);
 
         plan = new LinkedList<>();
     }
@@ -45,20 +46,26 @@ public abstract class Agent implements Runnable {
                     effector.clean(state.getAgentPosition());
                 }
                 else if(nextAction == Action.moveDown){
+                    int id = 1;
                     state.setAgentPosition(state.getAgentPosition().getX(),state.getAgentPosition().getY()+1);
-                    effector.move(state.getAgentPosition());
+                    effector.move(state.getAgentPosition(), id);
+
                 }
                 else if(nextAction == Action.moveLeft){
+                    int id = 2;
                     state.setAgentPosition(state.getAgentPosition().getX()-1,state.getAgentPosition().getY());
-                    effector.move(state.getAgentPosition());
+                    effector.move(state.getAgentPosition(), id);
+
                 }
                 else if(nextAction == Action.moveRight){
+                    int id = 3;
                     state.setAgentPosition(state.getAgentPosition().getX()+1,state.getAgentPosition().getY());
-                    effector.move(state.getAgentPosition());
+                    effector.move(state.getAgentPosition(), id);
                 }
                 else if(nextAction == Action.moveHigh){
+                    int id = 4;
                     state.setAgentPosition(state.getAgentPosition().getX(),state.getAgentPosition().getY()-1);
-                    effector.move(state.getAgentPosition());
+                    effector.move(state.getAgentPosition(), id);
                 }
                 try {
                     Thread.sleep(500);
