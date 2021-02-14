@@ -5,7 +5,7 @@ import environnement.environment;
 
 public class Effector {
 
-    environment environment;
+    private environment environment;
 
     public Effector(environment environment) {
         this.environment = environment;

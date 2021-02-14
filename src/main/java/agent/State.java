@@ -5,12 +5,25 @@ import environnement.Room;
 
 public class State {
 
-    private Room[][] map;
+    private final Room[][] map;
 
-    private Position agentPosition;
+    private final Position agentPosition;
 
     public State(Room[][] map, Position agentPosition) {
-        this.map = map;
+        this.map = new Room[5][5];
+        int i = 0;
+        int j = 0;
+        while(i<5){
+            while(j<5){
+                Room room = new Room();
+                room.setJewel(map[i][j].isJewel());
+                room.setDust(map[i][j].isDust());
+                this.map[i][j] = room;
+                j++;
+            }
+            j=0;
+            i++;
+        }
         this.agentPosition = agentPosition;
     }
 
@@ -18,16 +31,13 @@ public class State {
         return map;
     }
 
-    public void setMap(Room[][] map) {
-        this.map = map;
-    }
-
     public Room getRoom(int i, int j){
         return this.map[i][j];
     }
 
     public void updateRoom(int i, int j, Room room) {
-        this.map[i][j] = room;
+        this.map[i][j].setDust(room.isDust());
+        this.map[i][j].setJewel(room.isJewel());
     }
 
     public Position getAgentPosition() {

@@ -25,7 +25,7 @@ public abstract class Agent implements Runnable {
 
         int x = (int) (Math.random()*4);
         int y = (int) (Math.random()*4);
-        state = new State(updateState(), new Position(x, y));
+        state = new State(sensor.scanEnvironment(), new Position(x, y));
         state.printMap();
         System.out.println("position :" + state.getAgentPosition().getX() +", "+state.getAgentPosition().getY());
         effector.move(state.getAgentPosition());
@@ -38,7 +38,6 @@ public abstract class Agent implements Runnable {
         while (true){
             if (!plan.isEmpty()){
                 Action nextAction = plan.pop();
-                System.out.println("action : "+nextAction.getName());
                 if(nextAction == Action.gather){
                     effector.gather(state.getAgentPosition());
                 }
@@ -46,7 +45,7 @@ public abstract class Agent implements Runnable {
                     effector.clean(state.getAgentPosition());
                 }
                 else if(nextAction == Action.moveDown){
-                    state.setAgentPosition(state.getAgentPosition().getX(),state.getAgentPosition().getY()-1);
+                    state.setAgentPosition(state.getAgentPosition().getX(),state.getAgentPosition().getY()+1);
                     effector.move(state.getAgentPosition());
                 }
                 else if(nextAction == Action.moveLeft){
@@ -58,7 +57,7 @@ public abstract class Agent implements Runnable {
                     effector.move(state.getAgentPosition());
                 }
                 else if(nextAction == Action.moveHigh){
-                    state.setAgentPosition(state.getAgentPosition().getX(),state.getAgentPosition().getY()+1);
+                    state.setAgentPosition(state.getAgentPosition().getX(),state.getAgentPosition().getY()-1);
                     effector.move(state.getAgentPosition());
                 }
                 try {
@@ -68,14 +67,24 @@ public abstract class Agent implements Runnable {
                 }
             }
             else {
-                state.setMap(updateState());
+                updateState();
                 plan = planning();
             }
         }
     }
 
-    private Room[][] updateState(){
-        return sensor.scanEnvironment();
+    private void updateState(){
+         Room[][] updatedMap = sensor.scanEnvironment();
+        int i = 0;
+        int j = 0;
+        while(i<5){
+            while(j<5){
+                state.updateRoom(i, j, updatedMap[i][j]);
+                j++;
+            }
+            j=0;
+            i++;
+        }
     }
 
     protected boolean goalTest(State state){
