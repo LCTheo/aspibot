@@ -24,7 +24,7 @@ public class environment implements Runnable{
     private float DustScore;
 
     //Cout en électricté pour la mesure de performance de l'agent
-    private int electricityCost;
+    private int electricityCost = -1;
 
     /**
      * constructeur de la classe, initialise la map et les scores,
@@ -120,8 +120,11 @@ public class environment implements Runnable{
         this.map[position.getX()][position.getY()].setJewel(false);
         //Mise à jour graphique
         Display.render(Event.gather, position);
+        //Mise à jour des scores
         this.Jewelscore++;
         this.electricityCost++;
+        //Mise à jour graphique des scores
+        Display.updateScore(this.Jewelscore, this.electricityCost, 1);
     }
 
     /**
@@ -134,8 +137,12 @@ public class environment implements Runnable{
         this.map[position.getX()][position.getY()].setDust(false);
         //Mise à jour graphique
         Display.render(Event.clean, position);
+        //à modifier
+        //Mise à jour des scores
+        //Mise à jour graphique des scores
         this.DustScore++;
         this.electricityCost++;
+        Display.updateScore((int)this.DustScore, this.electricityCost, 2);
     }
 
     /**
@@ -162,8 +169,10 @@ public class environment implements Runnable{
         this.agentPosition = positionToGoTO;
         //Mise à jour graphique
         Display.render(Event.move, positionToGoTO);
-        
+        //Mise à jour du cout de l'agent
         this.electricityCost++;
+        //Mise à jour graphique du cout de l'agent
+        Display.updateScore(0, this.electricityCost, 3);
     }
 
     /**
