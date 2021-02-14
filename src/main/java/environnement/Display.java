@@ -4,9 +4,6 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.text.DefaultCaret;
 import java.awt.*;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Classe permettant l'affichage de l'environnement et de l'agent pour suivre les actions réalisées.
@@ -27,7 +24,7 @@ public class Display {
     //Score 
     private int score;
     //Évènement
-    private String events;
+    private Position agentPosition;
     //Label pour le score
     private JLabel scorelabel;
     //TextArea pour afficher les labels des différents évènements générés par l'environnement
@@ -68,7 +65,17 @@ public class Display {
                 panel.setSize(50, 50);
                 panel.setBackground(Color.gray);
                 panel.setBorder(border);
-                this.panel.add(panel);
+                j++;
+            }
+            j=0;
+            i++;
+        }
+
+        i = 0;
+        j = 0;
+        while(i<5){
+            while(j<5){
+                this.panel.add(this.tab_panels[j][i]);
                 j++;
             }
             j=0;
@@ -110,10 +117,10 @@ public class Display {
 
     /**
      * Initialise l'affichage de l'agent
-     * @param environmnet : instance de l'environnement pour récupérer la position initiale donnée par l'agent
+     * @param environment : instance de l'environnement pour récupérer la position initiale donnée par l'agent
      */
     public static void init(environment environment) {
-       display.render(Event.initpos,environment.getAgentPosition());
+       render(Event.initpos,environment.getAgentPosition());
 
     }
 
@@ -169,22 +176,29 @@ public class Display {
             //Mise à jour de l'affichage
             JLabel label = (JLabel) panel.getComponent(0);
             label.setIcon(null);
-            //Evenement pour supprimer la position de l'agent sur une case donnée        
+            //Evenement pour supprimer la position de l'agent sur une case donnée
         } else if (event.equals(Event.delBot)){
             JPanel panel = display.tab_panels[position.getX()][position.getY()];
-            //Affichage de l'évènement
-            display.eventlabel.append("Suppression de l'agent en: \t"+position.getX()+", "+position.getY()+"\n");
             //Mise à jour de l'affichage
             JLabel label = (JLabel) panel.getComponent(2);
             label.setIcon(null);
             //Evenement de déplacement de l'agent
         } else if (event.equals(Event.move)){
-            JPanel panel = display.tab_panels[position.getX()][position.getY()];
-            //Affichage de l'évènement
-            display.eventlabel.append("Déplacement de l'agent en: \t"+position.getX()+", "+position.getY()+"\n");
-            //Mise à jour de l'affichage
-            JLabel label = (JLabel) panel.getComponent(2);
-            label.setIcon(display.vacuum);
+            if(display.agentPosition == null){
+                JPanel panel = display.tab_panels[position.getX()][position.getY()];
+                //Affichage de l'évènement
+                //Mise à jour de l'affichage
+                JLabel label = (JLabel) panel.getComponent(2);
+                label.setIcon(display.vacuum);
+            }else {
+                JPanel panel = display.tab_panels[position.getX()][position.getY()];
+                //Affichage de l'évènement
+                display.eventlabel.append("Déplacement de l'agent en: \t"+position.getX()+", "+position.getY()+"\n");
+                //Mise à jour de l'affichage
+                JLabel label = (JLabel) panel.getComponent(2);
+                label.setIcon(display.vacuum);
+            }
+            display.agentPosition = position ;
         }
 
     }

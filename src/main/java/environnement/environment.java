@@ -144,7 +144,7 @@ public class environment implements Runnable{
      */
     public void agentMove(Position position){
         //Mise à jour grapgique pour supprimer l'agent de sa case précédente
-        Display.render(Event.delBot, this.position)
+        Display.render(Event.delBot, position);
         //Mise à jour de l'environnement
         this.agentPosition = position;
         //Mise à jour graphique

@@ -85,16 +85,7 @@ public class UninformedAgent extends Agent{
             s.setState(nextState.getRight());
             s.setPathCost(parent.getPathCost() + stepCost(parent, nextState.getLeft(), s));
             s.setDepth(parent.getDepth() + 1);
-            int i = 0;
-            if (successors.isEmpty()){
-                successors.add(s);
-            }
-            else {
-                while (successors.get(i).getAction().morePriorityThan(s.getAction()) && i < successors.size()){
-                    i++;
-                }
-                successors.add(i, s);
-            }
+            successors.add(s);
         }
         return successors;
     }
@@ -106,6 +97,19 @@ public class UninformedAgent extends Agent{
     protected List<Pair<Action, State>> successorFn(State lastState){
         List<Pair<Action, State>> successors = new ArrayList<>();
         State nextState;
+        if(lastState.getRoom(lastState.getAgentPosition().getX(), lastState.getAgentPosition().getY()).isDust()){
+            nextState = new State(lastState.getMap(), lastState.getAgentPosition());
+            nextState.getRoom(nextState.getAgentPosition().getX(), nextState.getAgentPosition().getY()).setDust(false);
+            nextState.getRoom(nextState.getAgentPosition().getX(), nextState.getAgentPosition().getY()).setJewel(false);
+            successors.add(new ImmutablePair<>(Action.clean, nextState));
+        }
+
+        if(lastState.getRoom(lastState.getAgentPosition().getX(), lastState.getAgentPosition().getY()).isJewel()){
+            nextState = new State(lastState.getMap(), lastState.getAgentPosition());
+            nextState.getRoom(nextState.getAgentPosition().getX(), nextState.getAgentPosition().getY()).setJewel(false);
+            successors.add(new ImmutablePair<>(Action.gather, nextState));
+        }
+
         if(lastState.getAgentPosition().getX()<4){
             Position newPos = new Position(lastState.getAgentPosition().getX()+1, lastState.getAgentPosition().getY());
             nextState = new State(lastState.getMap(), newPos);
@@ -127,18 +131,6 @@ public class UninformedAgent extends Agent{
             successors.add(new ImmutablePair<>(Action.moveHigh, nextState));
         }
 
-        if(lastState.getRoom(lastState.getAgentPosition().getX(), lastState.getAgentPosition().getY()).isDust()){
-            nextState = lastState.copy();
-            nextState.getRoom(nextState.getAgentPosition().getX(), nextState.getAgentPosition().getY()).setDust(false);
-            nextState.getRoom(nextState.getAgentPosition().getX(), nextState.getAgentPosition().getY()).setJewel(false);
-            successors.add(new ImmutablePair<>(Action.clean, nextState));
-        }
-
-        if(lastState.getRoom(lastState.getAgentPosition().getX(), lastState.getAgentPosition().getY()).isJewel()){
-            nextState = lastState.copy();
-            nextState.getRoom(nextState.getAgentPosition().getX(), nextState.getAgentPosition().getY()).setJewel(false);
-            successors.add(new ImmutablePair<>(Action.gather, nextState));
-        }
         return successors;
     }
 
