@@ -1,5 +1,6 @@
 package environnement;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
@@ -7,6 +8,11 @@ import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+
 
 /**
  * Classe permettant l'affichage de l'environnement et de l'agent pour suivre les actions réalisées.
@@ -48,9 +54,13 @@ public class Display {
     private JButton reset;
 
     //Images pour l'affichage graphique
-    private ImageIcon dust = new ImageIcon("src/main/resources/dust.png");
-    private ImageIcon jewel = new ImageIcon("src/main/resources/jewel.png");
-    private ImageIcon vacuum = new ImageIcon("src/main/resources/aspibot.png");
+    BufferedImage dustImg = getImage("/image/dust.png");
+    BufferedImage jewelImg = getImage("/image/jewel.png");
+    BufferedImage aspibotImg = getImage("/image/aspibot.png");
+
+    private ImageIcon dust = new ImageIcon(dustImg);
+    private ImageIcon jewel = new ImageIcon(jewelImg);
+    private ImageIcon vacuum = new ImageIcon(aspibotImg);
 
     /**
     * Constructeur de la classe
@@ -282,5 +292,23 @@ public class Display {
             display.costElec.setText(Integer.toString(elec));
         }
 
+     * from : https://stackoverflow.com/questions/19447104/load-image-from-a-filepath-via-bufferedimage
+     * @param filename : chemain vers l'image à charger
+     * @return buffer d'image
+     */
+    private BufferedImage getImage(String filename) {
+        // This time, you can use an InputStream to load
+        try {
+            // Grab the InputStream for the image.
+            InputStream in = getClass().getResourceAsStream(filename);
+
+            // Then read it.
+            return ImageIO.read(in);
+        } catch (IOException e) {
+            System.out.println("The image was not loaded.");
+            //System.exit(1);
+        }
+
+        return null;
     }
 }
