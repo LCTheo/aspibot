@@ -291,13 +291,14 @@ public class Display {
         } else if(id==3){
             display.costElec.setText(Integer.toString(elec));
         }
+    }
 
+    /**
      * from : https://stackoverflow.com/questions/19447104/load-image-from-a-filepath-via-bufferedimage
      * @param filename : chemain vers l'image à charger
      * @return buffer d'image
      */
     private BufferedImage getImage(String filename) {
-        // This time, you can use an InputStream to load
         try {
             // Grab the InputStream for the image.
             InputStream in = getClass().getResourceAsStream(filename);
@@ -306,7 +307,6 @@ public class Display {
             return ImageIO.read(in);
         } catch (IOException e) {
             System.out.println("The image was not loaded.");
-            //System.exit(1);
         }
 
         return null;
