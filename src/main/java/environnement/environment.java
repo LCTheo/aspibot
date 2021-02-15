@@ -24,7 +24,7 @@ public class environment implements Runnable{
     private float DustScore;
 
     //Cout en électricté pour la mesure de performance de l'agent
-    private int electricityCost;
+    private int electricityCost = -1;
 
     /**
      * constructeur de la classe, initialise la map et les scores,
@@ -115,13 +115,16 @@ public class environment implements Runnable{
      * @param position : position à laquelle l'évènement se produit
      */
     public void gather(Position position){
-        Display.render(Event.gather, position);
+        //Display.render(Event.gather, position);
         //Mise à jour de l'environnement
         this.map[position.getX()][position.getY()].setJewel(false);
         //Mise à jour graphique
         Display.render(Event.gather, position);
+        //Mise à jour des scores
         this.Jewelscore++;
         this.electricityCost++;
+        //Mise à jour graphique des scores
+        Display.updateScore(this.Jewelscore, this.electricityCost, 1);
     }
 
     /**
@@ -129,28 +132,47 @@ public class environment implements Runnable{
      * @param position : position à laquelle l'évènement se produit
      */
     public void clean(Position position){
-        Display.render(Event.clean, position);
+        //Display.render(Event.clean, position);
         //Mise à jour de l'environnement
         this.map[position.getX()][position.getY()].setDust(false);
         //Mise à jour graphique
         Display.render(Event.clean, position);
+        //à modifier
+        //Mise à jour des scores
+        //Mise à jour graphique des scores
         this.DustScore++;
         this.electricityCost++;
+        Display.updateScore((int)this.DustScore, this.electricityCost, 2);
     }
 
     /**
      * Repercute l'action de déplacement de l'agent sur l'environnement
-     * @param position : position à laquelle l'évènement se produit
+     * @param positionToGoTO : position vers laquelle l'agent se dirige
+     * @param id : identifiant pour connaitre la position précédente de l'agent
      */
-    public void agentMove(Position position){
-        //Mise à jour grapgique pour supprimer l'agent de sa case précédente
-        Display.render(Event.delBot, position);
+    public void agentMove(Position positionToGoTO, int id){
+        //Mise à jour graphique pour supprimer l'agent de sa case précédente
+        if(id==1){
+            Position oldposition = new Position(positionToGoTO.getX(), positionToGoTO.getY()-1);
+            Display.render(Event.delBot, oldposition);
+        } else if(id==2){
+            Position oldposition = new Position(positionToGoTO.getX()+1, positionToGoTO.getY());
+            Display.render(Event.delBot, oldposition);
+        } else if(id==3){
+            Position oldposition = new Position(positionToGoTO.getX()-1, positionToGoTO.getY());
+            Display.render(Event.delBot, oldposition);
+        } else if (id==4){
+            Position oldposition = new Position(positionToGoTO.getX(), positionToGoTO.getY()+1);
+            Display.render(Event.delBot, oldposition);
+        }
         //Mise à jour de l'environnement
-        this.agentPosition = position;
+        this.agentPosition = positionToGoTO;
         //Mise à jour graphique
-        Display.render(Event.move, position);
-        
+        Display.render(Event.move, positionToGoTO);
+        //Mise à jour du cout de l'agent
         this.electricityCost++;
+        //Mise à jour graphique du cout de l'agent
+        Display.updateScore(0, this.electricityCost, 3);
     }
 
     /**
@@ -191,5 +213,9 @@ public class environment implements Runnable{
     */
     public Position getAgentPosition(){
         return this.agentPosition;
+    }
+
+    public void setAgentPosition(Position position){
+        this.agentPosition = position;
     }
 }

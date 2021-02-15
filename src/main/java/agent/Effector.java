@@ -20,7 +20,7 @@ public class Effector {
         environment.clean(position);
     }
 
-    public void move(Position position){
-        environment.agentMove(position);
+    public void move(Position positionToGoTO, int id){
+        environment.agentMove(positionToGoTO, id);
     }
 }

@@ -3,12 +3,16 @@ package environnement;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
 import javax.swing.text.DefaultCaret;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+
 
 /**
  * Classe permettant l'affichage de l'environnement et de l'agent pour suivre les actions réalisées.
@@ -22,6 +26,13 @@ public class Display {
     private JPanel panel;
     //Panel pour afficher le score de l'agent
     private JPanel pan_score;
+
+    //Panel pour afficher les boutons de gestion
+    private JPanel pan_buttons;
+
+    //Panel footer
+    private JPanel south = new JPanel();
+
     //Panel pour afficher les évènements de l'environnement
     private JScrollPane pan_events;
     //Affichage graphique de l'environnement : tableau 2D de 5 par 5. Chaque Panel représente une case ("Room")
@@ -30,10 +41,17 @@ public class Display {
     private int score;
     //Évènement
     private Position agentPosition;
-    //Label pour le score
-    private JLabel scorelabel;
+    //Labels pour les scores
+    private JLabel scorelabelJewel;
+    private JLabel scorelabelDust;
+    private JLabel costElec;
     //TextArea pour afficher les labels des différents évènements générés par l'environnement
     private JTextArea eventlabel;
+
+    //Boutons pour gérer l'interface graphique
+    private JButton start_stop;
+    private JButton agent;
+    private JButton reset;
 
     //Images pour l'affichage graphique
     BufferedImage dustImg = getImage("/image/dust.png");
@@ -96,16 +114,61 @@ public class Display {
 
         //Ajout de la case "Score"
         this.pan_score = new JPanel();
-        this.scorelabel = new JLabel("", SwingConstants.CENTER);
-        this.scorelabel.setPreferredSize(new Dimension(100,50));
-        this.scorelabel.setBorder(border);
-        this.pan_score.add(scorelabel);
-        frame.add(this.pan_score, BorderLayout.SOUTH);
+        this.scorelabelJewel = new JLabel("", SwingConstants.CENTER);
+        this.scorelabelJewel.setPreferredSize(new Dimension(120,50));
+        this.scorelabelJewel.setBorder(new TitledBorder(BorderFactory.createTitledBorder(border, "Score Diamant")));
+        this.scorelabelDust = new JLabel("", SwingConstants.CENTER);
+        this.scorelabelDust.setPreferredSize(new Dimension(120,50));
+        this.scorelabelDust.setBorder(new TitledBorder(BorderFactory.createTitledBorder(border, "Score Poussière")));
+        this.costElec = new JLabel("", SwingConstants.CENTER);
+        this.costElec.setPreferredSize(new Dimension(120,50));
+        this.costElec.setBorder(new TitledBorder(BorderFactory.createTitledBorder(border, "Cout Electricité")));
+        this.pan_score.add(scorelabelJewel);
+        this.pan_score.add(scorelabelDust);
+        this.pan_score.add(costElec);
+        this.south.add(this.pan_score, BorderLayout.CENTER);
+
+
+        //Ajout des boutons de gestion
+        this.pan_buttons = new JPanel();
+        this.start_stop = new JButton("Start/Stop");
+        this.start_stop.setPreferredSize(new Dimension(100, 50));
+        this.start_stop.setBorder(border);
+        this.start_stop.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        this.agent = new JButton("Choix Agent");
+        this.agent.setPreferredSize(new Dimension(100, 50));
+        this.agent.setBorder(border);
+        this.agent.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        this.reset = new JButton("Reset");
+        this.reset.setPreferredSize(new Dimension(100, 50));
+        this.reset.setBorder(border);
+        this.reset.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        this.pan_buttons.add(start_stop);
+        this.pan_buttons.add(agent);
+        this.pan_buttons.add(reset);
+        this.south.add(this.pan_buttons, BorderLayout.EAST);
+
+        frame.add(this.south, BorderLayout.SOUTH);
 
         //Ajout de la case "Events"
         this.eventlabel = new JTextArea();
         this.eventlabel.setEditable(false);
-        this.eventlabel.setBorder(border);
+        this.eventlabel.setBorder(new TitledBorder(BorderFactory.createTitledBorder(border, "Evénements")));
         this.pan_events = new JScrollPane(this.eventlabel);
         this.pan_events.setPreferredSize(new Dimension(360,650));
         
@@ -129,7 +192,7 @@ public class Display {
      * @param environment : instance de l'environnement pour récupérer la position initiale donnée par l'agent
      */
     public static void init(environment environment) {
-       render(Event.initpos,environment.getAgentPosition());
+       render(Event.initpos, environment.getAgentPosition());
 
     }
 
@@ -170,7 +233,7 @@ public class Display {
             display.eventlabel.append("Récupération d'un diamant en: \t"+position.getX()+", "+position.getY()+"\n");
             //Mise à jour du score
             display.score++;
-            display.scorelabel.setText(Integer.toString(display.score));
+            //display.scorelabel.setText(Integer.toString(display.score));
             //Mise à jour de l'affichage
             JLabel label = (JLabel) panel.getComponent(1);
             label.setIcon(null);
@@ -181,7 +244,7 @@ public class Display {
             display.eventlabel.append("Nettoyage d'une poussière en: \t"+position.getX()+", "+position.getY()+"\n");
             //Mise à jour du score
             display.score++;
-            display.scorelabel.setText(Integer.toString(display.score));
+            //display.scorelabel.setText(Integer.toString(display.score));
             //Mise à jour de l'affichage
             JLabel label = (JLabel) panel.getComponent(0);
             label.setIcon(null);
@@ -213,6 +276,22 @@ public class Display {
     }
 
     /**
+     * Permet de mettre à jour graphiquement le score géré par l'environnement
+     * @param score : score à mettre à jour (soit le score des poussière, soit celui des diamants)
+     * @param elec : cout d'electricité à mettre à jour
+     * @param id : numéro d'identification de la mise à jour. Soit une mise à jour de poussière, soit une mise à jour de diamant, soit d'électricité
+     */
+    public static void updateScore(int score, int elec, int id){
+        if(id==1){
+            display.scorelabelJewel.setText(Integer.toString(score));
+            display.costElec.setText(Integer.toString(elec));
+        } else if(id==2){
+            display.scorelabelDust.setText(Integer.toString(score));
+            display.costElec.setText(Integer.toString(elec));
+        } else if(id==3){
+            display.costElec.setText(Integer.toString(elec));
+        }
+
      * from : https://stackoverflow.com/questions/19447104/load-image-from-a-filepath-via-bufferedimage
      * @param filename : chemain vers l'image à charger
      * @return buffer d'image
