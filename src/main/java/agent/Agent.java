@@ -85,7 +85,11 @@ public abstract class Agent implements Runnable {
                 }
             }
             else {
-                plan = planning();
+                try {
+                    plan = planning();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
             if (updateDecompte == 0){
                 updateDecompte = baseDecompte;
@@ -128,11 +132,6 @@ public abstract class Agent implements Runnable {
     private void learning(){
 
     }
-    protected abstract List<Node> expend(Node parent);
 
-    protected abstract int stepCost(Node parent, Action action, Node node);
-
-    protected abstract List<Pair<Action, State>> successorFn(State lastState);
-
-    protected abstract Deque<Action> planning();
+    protected abstract Deque<Action> planning() throws Exception;
 }

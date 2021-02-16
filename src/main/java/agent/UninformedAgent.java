@@ -20,6 +20,7 @@ public class UninformedAgent extends Agent{
 
     @Override
     protected Deque<Action> planning() {
+        Deque<Action> path = new LinkedList<>();
         Node solution = null;
         closed = new HashSet<>();
         int depth = 0;
@@ -33,7 +34,7 @@ public class UninformedAgent extends Agent{
                 depth = depth + 1;
             }
         }
-        Deque<Action> path = new LinkedList<>();
+
         Node currentNode = solution;
 
         while (currentNode != null){
@@ -43,17 +44,17 @@ public class UninformedAgent extends Agent{
         return path;
     }
 
-    private Node recursive_DLS(Node state, int limit) throws Exception{
+    private Node recursive_DLS(Node node, int limit) throws Exception{
         boolean cutoff = false;
-        if (goalTest(state.getState())){
-            return state;
+        if (goalTest(node.getState())){
+            return node;
         }
-        else if(state.getDepth() == limit){
+        else if(node.getDepth() == limit){
             throw new Exception();
 
         }
         else {
-            for (Node successor: expend(state)) {
+            for (Node successor: expend(node)) {
                 //if (!closed.contains(successor.getState())){
                   //  closed.add(successor.getState());
                     try {
