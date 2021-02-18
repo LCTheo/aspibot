@@ -1,13 +1,13 @@
 package agent;
 
-import environnement.environment;
+import environnement.Environment;
 import environnement.Room;
 
 public class Sensor {
 
-    environment environment;
+    Environment environment;
 
-    public Sensor(environment environment) {
+    public Sensor(Environment environment) {
         this.environment = environment;
     }
 

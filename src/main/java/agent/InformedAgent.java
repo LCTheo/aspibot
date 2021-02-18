@@ -1,21 +1,15 @@
 package agent;
 
-import environnement.Position;
-import environnement.Room;
-import environnement.environment;
-import org.apache.commons.lang3.tuple.ImmutablePair;
+import environnement.Environment;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static java.lang.Math.abs;
 
 public class InformedAgent extends Agent{
 
-    public InformedAgent(environment environment) {
+    public InformedAgent(Environment environment) {
         super(environment);
     }
 
@@ -39,64 +33,29 @@ public class InformedAgent extends Agent{
         return 1;
     }
 
-    protected List<Pair<Action, State>> successorFn(State lastState) {
-        List<Pair<Action, State>> successors = new ArrayList<>();
-        State nextState;
-        if(lastState.getRoom(lastState.getAgentPosition().getX(), lastState.getAgentPosition().getY()).isDust()){
-            nextState = new State(lastState.getMap(), lastState.getAgentPosition());
-            nextState.getRoom(nextState.getAgentPosition().getX(), nextState.getAgentPosition().getY()).setDust(false);
-            nextState.getRoom(nextState.getAgentPosition().getX(), nextState.getAgentPosition().getY()).setJewel(false);
-            successors.add(new ImmutablePair<>(Action.clean, nextState));
-        }
-
-        if(lastState.getRoom(lastState.getAgentPosition().getX(), lastState.getAgentPosition().getY()).isJewel()){
-            nextState = new State(lastState.getMap(), lastState.getAgentPosition());
-            nextState.getRoom(nextState.getAgentPosition().getX(), nextState.getAgentPosition().getY()).setJewel(false);
-            successors.add(new ImmutablePair<>(Action.gather, nextState));
-        }
-
-        if(lastState.getAgentPosition().getX()<4){
-            Position newPos = new Position(lastState.getAgentPosition().getX()+1, lastState.getAgentPosition().getY());
-            nextState = new State(lastState.getMap(), newPos);
-            successors.add(new ImmutablePair<>(Action.moveRight, nextState));
-        }
-        if(lastState.getAgentPosition().getX()>0){
-            Position newPos = new Position(lastState.getAgentPosition().getX()-1, lastState.getAgentPosition().getY());
-            nextState = new State(lastState.getMap(), newPos);
-            successors.add(new ImmutablePair<>(Action.moveLeft, nextState));
-        }
-        if(lastState.getAgentPosition().getY()<4){
-            Position newPos = new Position(lastState.getAgentPosition().getX(), lastState.getAgentPosition().getY()+1);
-            nextState = new State(lastState.getMap(), newPos);
-            successors.add(new ImmutablePair<>(Action.moveDown, nextState));
-        }
-        if(lastState.getAgentPosition().getY()>0){
-            Position newPos = new Position(lastState.getAgentPosition().getX(), lastState.getAgentPosition().getY()-1);
-            nextState = new State(lastState.getMap(), newPos);
-            successors.add(new ImmutablePair<>(Action.moveHigh, nextState));
-        }
-
-        return successors;
-    }
-
     @Override
     protected Deque<Action> planning() {
+        Set<State> closed = new HashSet<>();
         Deque<Action> path = new LinkedList<>();
         List<InformedNode> fringe = new ArrayList<>();
         InformedNode initialState = new InformedNode(this.state, null, 0, 0, heuristic(this.state));
         fringe.add(initialState);
         while (!fringe.isEmpty()){
             InformedNode node = fringe.remove(0);
-            node.getState().printMap();
-            System.out.println("position :" + node.getState().getAgentPosition().getX() +", "+node.getState().getAgentPosition().getY());
-            if (goalTest(node.getState())){
-                while (node != null){
-                    path.push(node.getAction());
-                    node = node.getParent();
+            if (!closed.contains(node.getState())){
+                closed.add(node.getState());
+                System.out.println("position :" + node.getState().getAgentPosition().getX() +", "+node.getState().getAgentPosition().getY());
+
+                if (goalTest(node.getState())){
+                    System.out.println("Solution trouvé !");
+                    while (node != null){
+                        path.push(node.getAction());
+                        node = node.getParent();
+                    }
+                    return path;
                 }
-                return path;
+                fringe = insertAll(expend(node), fringe);
             }
-            fringe = insertAll(expend(node), fringe);
         }
         System.out.println("Aucune solution trouvé.");
         return path;

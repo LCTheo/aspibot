@@ -9,7 +9,7 @@ import java.util.Timer;
  * Classe principale de l'environnement.
  * Permet de gérer les évènements et des répercuter les actions de l'agent sur l'environnement et par conséquent sur l'affichage graphique.
  */
-public class environment implements Runnable{
+public class Environment implements Runnable{
 
     //Carte des pieces avec les éléments : tableau en 2D d'instance de la classe "Room"
     private final Room[][] map = new Room[5][5];
@@ -25,12 +25,13 @@ public class environment implements Runnable{
 
     //Cout en électricté pour la mesure de performance de l'agent
     private int electricityCost = -1;
+    private boolean started;
 
     /**
      * constructeur de la classe, initialise la map et les scores,
      * La position de départ est donnée par l'agent
      */
-    public environment() {
+    public Environment() {
         //Création du tableau de cases
         int i = 0;
         int j = 0;
@@ -51,7 +52,7 @@ public class environment implements Runnable{
             n++;
         }
         addJewel();
-
+        started = false;
     }
 
     /**
@@ -59,15 +60,7 @@ public class environment implements Runnable{
      */
     @Override
     public void run() {
-        while(true){
-
-            //Création d'un timer pour générer les poussières et les diamants selon une certaine fréquence
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
+    while (true){
             //Probabilité d'avoir une nouvelle poussière (1 chance sur 2)
             double probD = Math.random();
             if(probD>=0.5){
@@ -78,8 +71,13 @@ public class environment implements Runnable{
             if(probJ<=0.33){
                 addJewel();
             }
+            //Création d'un timer pour générer les poussières et les diamants selon une certaine fréquence
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
-
     }
 
     /**
@@ -152,6 +150,10 @@ public class environment implements Runnable{
      */
     public void agentMove(Position positionToGoTO, int id){
         //Mise à jour graphique pour supprimer l'agent de sa case précédente
+        if (id == 0){
+            this.agentPosition = positionToGoTO;
+            return;
+        }
         if(id==1){
             Position oldposition = new Position(positionToGoTO.getX(), positionToGoTO.getY()-1);
             Display.render(Event.delBot, oldposition);
@@ -217,5 +219,13 @@ public class environment implements Runnable{
 
     public void setAgentPosition(Position position){
         this.agentPosition = position;
+    }
+
+    public boolean isStarted() {
+        return started;
+    }
+
+    public void setStarted(boolean started) {
+        this.started = started;
     }
 }

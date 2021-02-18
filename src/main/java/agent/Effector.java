@@ -1,13 +1,13 @@
 package agent;
 
 import environnement.Position;
-import environnement.environment;
+import environnement.Environment;
 
 public class Effector {
 
-    private environment environment;
+    private Environment environment;
 
-    public Effector(environment environment) {
+    public Effector(Environment environment) {
         this.environment = environment;
     }
 

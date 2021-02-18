@@ -1,9 +1,6 @@
 package agent;
 
-import environnement.Position;
-import environnement.Room;
-import environnement.environment;
-import org.apache.commons.lang3.tuple.ImmutablePair;
+import environnement.Environment;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
@@ -14,7 +11,7 @@ import java.util.*;
 public class UninformedAgent extends Agent{
 
     private Set<State> closed;
-    public UninformedAgent(environment environment) {
+    public UninformedAgent(Environment environment) {
         super(environment);
     }
 
@@ -55,8 +52,6 @@ public class UninformedAgent extends Agent{
         }
         else {
             for (Node successor: expend(node)) {
-                //if (!closed.contains(successor.getState())){
-                  //  closed.add(successor.getState());
                     try {
                         Node result = recursive_DLS(successor, limit);
                         if (result != null){
@@ -95,44 +90,6 @@ public class UninformedAgent extends Agent{
         return 1;
     }
 
-    protected List<Pair<Action, State>> successorFn(State lastState){
-        List<Pair<Action, State>> successors = new ArrayList<>();
-        State nextState;
-        if(lastState.getRoom(lastState.getAgentPosition().getX(), lastState.getAgentPosition().getY()).isDust()){
-            nextState = new State(lastState.getMap(), lastState.getAgentPosition());
-            nextState.getRoom(nextState.getAgentPosition().getX(), nextState.getAgentPosition().getY()).setDust(false);
-            nextState.getRoom(nextState.getAgentPosition().getX(), nextState.getAgentPosition().getY()).setJewel(false);
-            successors.add(new ImmutablePair<>(Action.clean, nextState));
-        }
 
-        if(lastState.getRoom(lastState.getAgentPosition().getX(), lastState.getAgentPosition().getY()).isJewel()){
-            nextState = new State(lastState.getMap(), lastState.getAgentPosition());
-            nextState.getRoom(nextState.getAgentPosition().getX(), nextState.getAgentPosition().getY()).setJewel(false);
-            successors.add(new ImmutablePair<>(Action.gather, nextState));
-        }
-
-        if(lastState.getAgentPosition().getX()<4){
-            Position newPos = new Position(lastState.getAgentPosition().getX()+1, lastState.getAgentPosition().getY());
-            nextState = new State(lastState.getMap(), newPos);
-            successors.add(new ImmutablePair<>(Action.moveRight, nextState));
-        }
-        if(lastState.getAgentPosition().getX()>0){
-            Position newPos = new Position(lastState.getAgentPosition().getX()-1, lastState.getAgentPosition().getY());
-            nextState = new State(lastState.getMap(), newPos);
-            successors.add(new ImmutablePair<>(Action.moveLeft, nextState));
-        }
-        if(lastState.getAgentPosition().getY()<4){
-            Position newPos = new Position(lastState.getAgentPosition().getX(), lastState.getAgentPosition().getY()+1);
-            nextState = new State(lastState.getMap(), newPos);
-            successors.add(new ImmutablePair<>(Action.moveDown, nextState));
-        }
-        if(lastState.getAgentPosition().getY()>0){
-            Position newPos = new Position(lastState.getAgentPosition().getX(), lastState.getAgentPosition().getY()-1);
-            nextState = new State(lastState.getMap(), newPos);
-            successors.add(new ImmutablePair<>(Action.moveHigh, nextState));
-        }
-
-        return successors;
-    }
 
 }
