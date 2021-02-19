@@ -1,5 +1,9 @@
 package environnement;
 
+import agent.Agent;
+import agent.InformedAgent;
+import agent.UninformedAgent;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -9,7 +13,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -28,7 +31,7 @@ public class Display {
     private JPanel pan_score;
 
     //Panel pour afficher les boutons de gestion
-    private JPanel pan_buttons;
+    private JFrame frame;
 
     //Panel footer
     private JPanel south = new JPanel();
@@ -48,27 +51,26 @@ public class Display {
     //TextArea pour afficher les labels des différents évènements générés par l'environnement
     private JTextArea eventlabel;
 
-    //Boutons pour gérer l'interface graphique
-    private JButton start_stop;
-    private JButton agent;
-    private JButton reset;
-
-    //Images pour l'affichage graphique
-    BufferedImage dustImg = getImage("/image/dust.png");
-    BufferedImage jewelImg = getImage("/image/jewel.png");
-    BufferedImage aspibotImg = getImage("/image/aspibot.png");
-
-    private ImageIcon dust = new ImageIcon(dustImg);
-    private ImageIcon jewel = new ImageIcon(jewelImg);
-    private ImageIcon vacuum = new ImageIcon(aspibotImg);
+    private final ImageIcon dust;
+    private final ImageIcon jewel;
+    private final ImageIcon vacuum;
 
     /**
     * Constructeur de la classe
     * Le constructeur va en réaliter construire l'ensemble de l'affichage graphique
     **/
     private Display() {
+
+        //Images pour l'affichage graphique
+        BufferedImage dustImg = getImage("/image/dust.png");
+        BufferedImage jewelImg = getImage("/image/jewel.png");
+        BufferedImage aspibotImg = getImage("/image/aspibot.png");
+        this.dust = new ImageIcon(dustImg);
+        this.jewel = new ImageIcon(jewelImg);
+        this.vacuum = new ImageIcon(aspibotImg);
+
         //Création de la fenetre principale
-        JFrame frame = new JFrame();
+        frame = new JFrame();
         this.panel = new JPanel();
         //Création d'une bordure pour délimiter les cases.
         Border border = BorderFactory.createLineBorder(Color.black,2);
@@ -129,39 +131,6 @@ public class Display {
         this.south.add(this.pan_score, BorderLayout.CENTER);
 
 
-        //Ajout des boutons de gestion
-        this.pan_buttons = new JPanel();
-        this.start_stop = new JButton("Start/Stop");
-        this.start_stop.setPreferredSize(new Dimension(100, 50));
-        this.start_stop.setBorder(border);
-        this.start_stop.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        this.agent = new JButton("Choix Agent");
-        this.agent.setPreferredSize(new Dimension(100, 50));
-        this.agent.setBorder(border);
-        this.agent.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        this.reset = new JButton("Reset");
-        this.reset.setPreferredSize(new Dimension(100, 50));
-        this.reset.setBorder(border);
-        this.reset.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        this.pan_buttons.add(start_stop);
-        this.pan_buttons.add(agent);
-        this.pan_buttons.add(reset);
-        this.south.add(this.pan_buttons, BorderLayout.EAST);
 
         frame.add(this.south, BorderLayout.SOUTH);
 
@@ -185,14 +154,20 @@ public class Display {
         frame.setResizable(false);
         frame.pack();
         frame.setVisible(true);
+
+
+
+
     }
 
     /**
      * Initialise l'affichage de l'agent
      * @param environment : instance de l'environnement pour récupérer la position initiale donnée par l'agent
+     * @param agentType : type d'agent utilisé
      */
-    public static void init(environment environment) {
+    public static void init(Environment environment, String agentType) {
        render(Event.initpos, environment.getAgentPosition());
+       display.frame.setTitle("Aspibot : "+agentType+" agent");
 
     }
 
@@ -241,12 +216,14 @@ public class Display {
         } else if (event.equals(Event.clean)){
             JPanel panel = display.tab_panels[position.getX()][position.getY()];
             //Affichage de l'évènement
-            display.eventlabel.append("Nettoyage d'une poussière en: \t"+position.getX()+", "+position.getY()+"\n");
+            display.eventlabel.append("Nettoyage de la pièce en: \t"+position.getX()+", "+position.getY()+"\n");
             //Mise à jour du score
             display.score++;
             //display.scorelabel.setText(Integer.toString(display.score));
             //Mise à jour de l'affichage
-            JLabel label = (JLabel) panel.getComponent(0);
+            JLabel label = (JLabel) panel.getComponent(1);
+            label.setIcon(null);
+            label = (JLabel) panel.getComponent(0);
             label.setIcon(null);
             //Evenement pour supprimer la position de l'agent sur une case donnée
         } else if (event.equals(Event.delBot)){
@@ -256,14 +233,13 @@ public class Display {
             label.setIcon(null);
             //Evenement de déplacement de l'agent
         } else if (event.equals(Event.move)){
+            JPanel panel = display.tab_panels[position.getX()][position.getY()];
             if(display.agentPosition == null){
-                JPanel panel = display.tab_panels[position.getX()][position.getY()];
                 //Affichage de l'évènement
                 //Mise à jour de l'affichage
                 JLabel label = (JLabel) panel.getComponent(2);
                 label.setIcon(display.vacuum);
             }else {
-                JPanel panel = display.tab_panels[position.getX()][position.getY()];
                 //Affichage de l'évènement
                 display.eventlabel.append("Déplacement de l'agent en: \t"+position.getX()+", "+position.getY()+"\n");
                 //Mise à jour de l'affichage

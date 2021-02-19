@@ -1,27 +1,28 @@
 package agent;
 
-import environnement.Position;
-import environnement.Room;
-import environnement.environment;
-import org.apache.commons.lang3.tuple.ImmutablePair;
+import environnement.Environment;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
 
 /**
- * @theo
+ * Classe implémentant la version non informé de l'agent. l'algorithme utilisé est iterative deepning search.
+ * la structure utilisé est un tree search
  */
 public class UninformedAgent extends Agent{
 
-    private Set<State> closed;
-    public UninformedAgent(environment environment) {
+    /**
+     * Constructeur de la classe UninformedAgent
+     * @param environment environnement dans lequel évolue l'agent
+     */
+    public UninformedAgent(Environment environment) {
         super(environment);
     }
 
     @Override
     protected Deque<Action> planning() {
+        Deque<Action> path = new LinkedList<>();
         Node solution = null;
-        closed = new HashSet<>();
         int depth = 0;
         Node initialState= new Node(this.state, null, 0, 0 );
         while(solution == null){
@@ -33,7 +34,7 @@ public class UninformedAgent extends Agent{
                 depth = depth + 1;
             }
         }
-        Deque<Action> path = new LinkedList<>();
+        System.out.println("Solution trouvé !");
         Node currentNode = solution;
 
         while (currentNode != null){
@@ -43,19 +44,24 @@ public class UninformedAgent extends Agent{
         return path;
     }
 
-    private Node recursive_DLS(Node state, int limit) throws Exception{
+    /**
+     * methode de recherche en profondeur utilisé de maniere récursive.
+     * @param node node initial de la recherche
+     * @param limit limite de profondeur pour cette itération
+     * @return le node solution si trouvé, null si pas de solution trouvé
+     * @throws Exception limite de la recherche atteinte
+     */
+    private Node recursive_DLS(Node node, int limit) throws Exception{
         boolean cutoff = false;
-        if (goalTest(state.getState())){
-            return state;
+        if (goalTest(node.getState())){
+            return node;
         }
-        else if(state.getDepth() == limit){
+        else if(node.getDepth() == limit){
             throw new Exception();
 
         }
         else {
-            for (Node successor: expend(state)) {
-                //if (!closed.contains(successor.getState())){
-                  //  closed.add(successor.getState());
+            for (Node successor: expend(node)) {
                     try {
                         Node result = recursive_DLS(successor, limit);
                         if (result != null){
@@ -75,6 +81,11 @@ public class UninformedAgent extends Agent{
         }
     }
 
+    /**
+     * methode permetant d'étendre la frontier d'exploration
+     * @param parent node initial de l'extention
+     * @return liste de node
+     */
     protected List<Node> expend(Node parent){
         List<Node> successors = new ArrayList<>();
 
@@ -90,48 +101,17 @@ public class UninformedAgent extends Agent{
         return successors;
     }
 
+    /**
+     * calcul du coup d'un node donnée à partir de son parent et de l'action associée
+     * @param parent parent du node
+     * @param action action associé au node
+     * @param node node dont le coût est à déterminer
+     * @return valeur du coût
+     */
     protected int stepCost(Node parent, Action action, Node node) {
         return 1;
     }
 
-    protected List<Pair<Action, State>> successorFn(State lastState){
-        List<Pair<Action, State>> successors = new ArrayList<>();
-        State nextState;
-        if(lastState.getRoom(lastState.getAgentPosition().getX(), lastState.getAgentPosition().getY()).isDust()){
-            nextState = new State(lastState.getMap(), lastState.getAgentPosition());
-            nextState.getRoom(nextState.getAgentPosition().getX(), nextState.getAgentPosition().getY()).setDust(false);
-            nextState.getRoom(nextState.getAgentPosition().getX(), nextState.getAgentPosition().getY()).setJewel(false);
-            successors.add(new ImmutablePair<>(Action.clean, nextState));
-        }
 
-        if(lastState.getRoom(lastState.getAgentPosition().getX(), lastState.getAgentPosition().getY()).isJewel()){
-            nextState = new State(lastState.getMap(), lastState.getAgentPosition());
-            nextState.getRoom(nextState.getAgentPosition().getX(), nextState.getAgentPosition().getY()).setJewel(false);
-            successors.add(new ImmutablePair<>(Action.gather, nextState));
-        }
-
-        if(lastState.getAgentPosition().getX()<4){
-            Position newPos = new Position(lastState.getAgentPosition().getX()+1, lastState.getAgentPosition().getY());
-            nextState = new State(lastState.getMap(), newPos);
-            successors.add(new ImmutablePair<>(Action.moveRight, nextState));
-        }
-        if(lastState.getAgentPosition().getX()>0){
-            Position newPos = new Position(lastState.getAgentPosition().getX()-1, lastState.getAgentPosition().getY());
-            nextState = new State(lastState.getMap(), newPos);
-            successors.add(new ImmutablePair<>(Action.moveLeft, nextState));
-        }
-        if(lastState.getAgentPosition().getY()<4){
-            Position newPos = new Position(lastState.getAgentPosition().getX(), lastState.getAgentPosition().getY()+1);
-            nextState = new State(lastState.getMap(), newPos);
-            successors.add(new ImmutablePair<>(Action.moveDown, nextState));
-        }
-        if(lastState.getAgentPosition().getY()>0){
-            Position newPos = new Position(lastState.getAgentPosition().getX(), lastState.getAgentPosition().getY()-1);
-            nextState = new State(lastState.getMap(), newPos);
-            successors.add(new ImmutablePair<>(Action.moveHigh, nextState));
-        }
-
-        return successors;
-    }
 
 }

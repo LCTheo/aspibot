@@ -1,15 +1,10 @@
 package environnement;
 
-import javax.swing.*;
-import java.awt.*;
-import java.util.Random;
-import java.util.Timer;
-
 /**
  * Classe principale de l'environnement.
  * Permet de gérer les évènements et des répercuter les actions de l'agent sur l'environnement et par conséquent sur l'affichage graphique.
  */
-public class environment implements Runnable{
+public class Environment implements Runnable{
 
     //Carte des pieces avec les éléments : tableau en 2D d'instance de la classe "Room"
     private final Room[][] map = new Room[5][5];
@@ -21,16 +16,16 @@ public class environment implements Runnable{
     private int Jewelscore;
     
     //Score de ramassage, = poussiere_ramassé/poussiere_total
-    private float DustScore;
+    private int DustScore;
 
     //Cout en électricté pour la mesure de performance de l'agent
-    private int electricityCost = -1;
+    private int electricityCost;
 
     /**
      * constructeur de la classe, initialise la map et les scores,
      * La position de départ est donnée par l'agent
      */
-    public environment() {
+    public Environment() {
         //Création du tableau de cases
         int i = 0;
         int j = 0;
@@ -44,14 +39,16 @@ public class environment implements Runnable{
             i++;
         }
 
+        this.Jewelscore = 0;
+        this.DustScore = 0;
+        this.electricityCost = 0;
         //Ici on génère 4 poussière et 1 diamant
         int n = 0;
-        while(n<4){
+        while(n<3){
             addDust();
             n++;
         }
         addJewel();
-
     }
 
     /**
@@ -59,15 +56,12 @@ public class environment implements Runnable{
      */
     @Override
     public void run() {
-        while(true){
-
-            //Création d'un timer pour générer les poussières et les diamants selon une certaine fréquence
+        while (true){
             try {
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
             //Probabilité d'avoir une nouvelle poussière (1 chance sur 2)
             double probD = Math.random();
             if(probD>=0.5){
@@ -78,8 +72,9 @@ public class environment implements Runnable{
             if(probJ<=0.33){
                 addJewel();
             }
-        }
+            //Création d'un timer pour générer les poussières et les diamants selon une certaine fréquence
 
+        }
     }
 
     /**
@@ -108,6 +103,8 @@ public class environment implements Runnable{
         this.map[position.getX()][position.getY()].setDust(true);
         //Mise à jour graphique
         Display.render(Event.addDust, position);
+        this.DustScore++;
+        Display.updateScore(this.DustScore, this.electricityCost, 2);
     }
 
     /**
@@ -135,14 +132,19 @@ public class environment implements Runnable{
         //Display.render(Event.clean, position);
         //Mise à jour de l'environnement
         this.map[position.getX()][position.getY()].setDust(false);
+        if (this.map[position.getX()][position.getY()].isJewel()){
+            this.Jewelscore--;
+            Display.updateScore(this.Jewelscore, this.electricityCost, 1);
+        }
+        this.map[position.getX()][position.getY()].setJewel(false);
         //Mise à jour graphique
         Display.render(Event.clean, position);
         //à modifier
         //Mise à jour des scores
         //Mise à jour graphique des scores
-        this.DustScore++;
+        this.DustScore--;
         this.electricityCost++;
-        Display.updateScore((int)this.DustScore, this.electricityCost, 2);
+        Display.updateScore(this.DustScore, this.electricityCost, 2);
     }
 
     /**
@@ -195,7 +197,7 @@ public class environment implements Runnable{
     * Getter pour obtenir le score de poussière de l'agent
     * return DustScore : le score de poussière de l'agent
     */
-    public float getDustScore() {
+    public int getDustScore() {
         return DustScore;
     }
     
@@ -213,9 +215,5 @@ public class environment implements Runnable{
     */
     public Position getAgentPosition(){
         return this.agentPosition;
-    }
-
-    public void setAgentPosition(Position position){
-        this.agentPosition = position;
     }
 }

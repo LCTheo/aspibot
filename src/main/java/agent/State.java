@@ -3,12 +3,23 @@ package agent;
 import environnement.Position;
 import environnement.Room;
 
+/**
+ * Classe représentant un état du probleme.
+ * Cela comprend un tableau de piece qui contient un indicateur de poussiere et de bijou et la position de l'agent.
+ */
 public class State {
 
+    //tableau de piece représentent l'environement
     private final Room[][] map;
 
+    //position de l'agent dans cette état
     private final Position agentPosition;
 
+    /**
+     * Constructeur de la classe State
+     * @param map tableau de piece
+     * @param agentPosition position de l'agent
+     */
     public State(Room[][] map, Position agentPosition) {
         this.map = new Room[5][5];
         int i = 0;
@@ -27,32 +38,56 @@ public class State {
         this.agentPosition = agentPosition;
     }
 
+    /**
+     * getter du tableau de piece
+     * @return tableau de piece
+     */
     public Room[][] getMap() {
         return map;
     }
 
+    /**
+     * retourne les indicateurs de présence pour une piece donnée
+     * @param i coordonné x de la piece
+     * @param j coordonné y de la piece
+     * @return une piece
+     */
     public Room getRoom(int i, int j){
         return this.map[i][j];
     }
 
+    /**
+     * permet de modifier les indicateurs de présence pour une piece donnée
+     * @param i coordonné x de la piece
+     * @param j coordonné y de la piece
+     * @param room indicateur de présence de la piece
+     */
     public void updateRoom(int i, int j, Room room) {
         this.map[i][j].setDust(room.isDust());
         this.map[i][j].setJewel(room.isJewel());
     }
 
+    /**
+     * getter de la position de l'agent
+     * @return
+     */
     public Position getAgentPosition() {
         return agentPosition;
     }
 
+    /**
+     * setter de la position de l'agent
+     * @param x nouvelle coordonné x
+     * @param y nouvelle coordonné y
+     */
     public void setAgentPosition(int x, int y) {
         this.agentPosition.setX(x);
         this.agentPosition.setY(y);
     }
 
-    public State copy(){
-        return new State(this.map, this.agentPosition);
-    }
-
+    /**
+     * affiche le tableau de piece avec les indicateurs de présence dans la console
+     */
     public void printMap(){
         System.out.println("+--+--+--+--+--+");
         System.out.print("|" +(this.map[0][0].isDust() ? 1 : 0)+""+(this.map[0][0].isJewel() ? 1 : 0)+"|");
