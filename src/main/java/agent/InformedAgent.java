@@ -8,7 +8,7 @@ import static java.lang.Math.abs;
 
 /**
  * Classe implémentant la version informé de l'agent. l'algorithme utilisé est A* dans sa forme simple.
- * de plus la structure utilisé est un graph search, ceci afin d'évité les boucles lié a l'heuristique.
+ * de plus la structure utilisée est un graph search, ceci afin d'éviter les boucles lié à l'heuristique.
  * l'heuristique représenté par la méthode heuristic(State state) est basé sur la distance de manhattan.
  */
 public class InformedAgent extends Agent{
@@ -54,9 +54,9 @@ public class InformedAgent extends Agent{
     }
 
     /**
-     * methode permetant d'étendre la frontier d'exploration
-     * @param parent node initial de l'extention
-     * @return liste de node
+     * methode permettant d'étendre la frontier d'exploration
+     * @param parent noeud initial de l'expansion
+     * @return liste de noeud
      */
     protected List<InformedNode> expend(InformedNode parent) {
         List<InformedNode> successors = new ArrayList<>();
@@ -75,10 +75,10 @@ public class InformedAgent extends Agent{
     }
 
     /**
-     * calcul du coup d'un node donnée à partir de son parent et de l'action associée
-     * @param parent parent du node
-     * @param action action associé au node
-     * @param node node dont le coût est à déterminer
+     * calcul du coup d'un noeud donnée à partir de son parent et de l'action associée
+     * @param parent parent du noeud
+     * @param action action associée au noeud
+     * @param node noeud dont le coût est à déterminer
      * @return valeur du coût
      */
     protected int stepCost(Node parent, Action action, Node node) {
@@ -86,9 +86,9 @@ public class InformedAgent extends Agent{
     }
 
     /**
-     * methode d'insertion des nouveaux node dans la frontière
+     * methode d'insertion des nouveaux noeud dans la frontière
      * @param expend liste des nodes à ajouter
-     * @param fringe frontière d'exploration actuel
+     * @param fringe frontière d'exploration actuelle
      * @return la frontière actualisé
      */
     private List<InformedNode> insertAll(List<InformedNode> expend, List<InformedNode> fringe) {
@@ -110,7 +110,7 @@ public class InformedAgent extends Agent{
     }
 
     /**
-     * methode permetant de determiner le coût théorique restant pour arriver au but à partir d'un état donnée
+     * methode permettant de determiner le coût théorique restant pour arriver au but à partir d'un état donnée
      * @param state état de départ
      * @return coût théorique calculé
      */

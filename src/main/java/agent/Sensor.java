@@ -21,7 +21,7 @@ public class Sensor {
 
     /**
      * permet de donner l'état de l'environnement à l'agent
-     * @return tableau représentent les pieces de l'environnement
+     * @return un tableau représentant les pieces de l'environnement
      */
     public Room[][] scanEnvironment(){
         return environment.getMap();

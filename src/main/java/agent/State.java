@@ -12,7 +12,7 @@ public class State {
     //tableau de piece représentent l'environement
     private final Room[][] map;
 
-    //position de l'agent dans cette état
+    //position de l'agent dans cet état
     private final Position agentPosition;
 
     /**

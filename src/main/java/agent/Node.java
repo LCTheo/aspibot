@@ -1,28 +1,28 @@
 package agent;
 
-import environnement.Room;
-import environnement.Position;
-
+/**
+ * classe représentant les noeuds de l'arbre de recherche
+ */
 public class Node {
 
-    //état correspondant au node
+    //état correspondant au noeud
     private State state;
     //parent du noeud
     private Node parent;
-    //action correspondant au node
+    //action correspondant au noeud
     private Action action;
-    //profondeur du node
+    //profondeur du noeud
     private int depth;
-    //cout pour arriver dans l'état du node
+    //cout pour arriver dans l'état du noeud
     private int pathCost;
 
 
     /**
      * constructeur de la classe Node
-     * @param state état du node
-     * @param parent parent du node
-     * @param depth profondeur du node
-     * @param pathCost cout pour arriver dans l'état du node
+     * @param state état du noeud
+     * @param parent parent du noeud
+     * @param depth profondeur du noeud
+     * @param pathCost cout pour arriver dans l'état du noeud
      */
     public Node(State state, Node parent, int depth, int pathCost) {
         this.state = state;
@@ -38,7 +38,7 @@ public class Node {
     }
 
     /**
-     * getter de l'état correspondant au node
+     * getter de l'état correspondant au noeud
      * @return this.state
      */
     public State getState() {
@@ -46,7 +46,7 @@ public class Node {
     }
 
     /**
-     * getter du parent du node
+     * getter du parent du noeud
      * @return this.parent
      */
     public Node getParent() {
@@ -54,7 +54,7 @@ public class Node {
     }
 
     /**
-     * getter de la profondeur du node
+     * getter de la profondeur du noeud
      * @return this.depth
      */
     public int getDepth() {
@@ -62,7 +62,7 @@ public class Node {
     }
 
     /**
-     * getter du cout pour arriver à ce node
+     * getter du cout pour arriver à ce noeud
      * @return this.pathCost
      */
     public int getPathCost() {
@@ -70,7 +70,7 @@ public class Node {
     }
 
     /**
-     * getter de l'action associé au node
+     * getter de l'action associé au noeud
      * @return this.action
      */
     public Action getAction() {
@@ -78,40 +78,40 @@ public class Node {
     }
 
     /**
-     * setter pour l'état du node
-     * @param state nouvelle état du node
+     * setter pour l'état du noeud
+     * @param state nouvelle état du noeud
      */
     public void setState(State state) {
         this.state = state;
     }
 
     /**
-     * setter pour le parent du node
-     * @param parent nouveau parent du node
+     * setter pour le parent du noeud
+     * @param parent nouveau parent du noeud
      */
     public void setParent(Node parent) {
         this.parent = parent;
     }
 
     /**
-     * setter pour la profondeur du node
-     * @param depth nouvelle profondeur du node
+     * setter pour la profondeur du noeud
+     * @param depth nouvelle profondeur du noeud
      */
     public void setDepth(int depth) {
         this.depth = depth;
     }
 
     /**
-     * setter pour le cout du node
-     * @param pathCost nouveau cout du node
+     * setter pour le cout du noeud
+     * @param pathCost nouveau cout du noeud
      */
     public void setPathCost(int pathCost) {
         this.pathCost = pathCost;
     }
 
     /**
-     * setter pour l'action associé au node
-     * @param action nouvelle action associé du node
+     * setter pour l'action associé au noeud
+     * @param action nouvelle action associé du noeud
      */
     public void setAction(Action action) {
         this.action = action;

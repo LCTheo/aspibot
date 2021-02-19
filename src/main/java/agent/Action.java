@@ -1,7 +1,7 @@
 package agent;
 
 public class Action {
-    // Liste des action possible pour l'agent
+    // Liste des actions possibles pour l'agent
     public static final Action gather = new Action("gather");
 
     public static final Action clean = new Action("clean");
