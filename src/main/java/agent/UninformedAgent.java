@@ -6,11 +6,15 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.*;
 
 /**
- * @theo
+ * Classe implémentant la version non informé de l'agent. l'algorithme utilisé est iterative deepning search.
+ * la structure utilisé est un tree search
  */
 public class UninformedAgent extends Agent{
 
-    private Set<State> closed;
+    /**
+     * Constructeur de la classe UninformedAgent
+     * @param environment environnement dans lequel évolue l'agent
+     */
     public UninformedAgent(Environment environment) {
         super(environment);
     }
@@ -19,7 +23,6 @@ public class UninformedAgent extends Agent{
     protected Deque<Action> planning() {
         Deque<Action> path = new LinkedList<>();
         Node solution = null;
-        closed = new HashSet<>();
         int depth = 0;
         Node initialState= new Node(this.state, null, 0, 0 );
         while(solution == null){
@@ -31,7 +34,7 @@ public class UninformedAgent extends Agent{
                 depth = depth + 1;
             }
         }
-
+        System.out.println("Solution trouvé !");
         Node currentNode = solution;
 
         while (currentNode != null){
@@ -41,6 +44,13 @@ public class UninformedAgent extends Agent{
         return path;
     }
 
+    /**
+     * methode de recherche en profondeur utilisé de maniere récursive.
+     * @param node node initial de la recherche
+     * @param limit limite de profondeur pour cette itération
+     * @return le node solution si trouvé, null si pas de solution trouvé
+     * @throws Exception limite de la recherche atteinte
+     */
     private Node recursive_DLS(Node node, int limit) throws Exception{
         boolean cutoff = false;
         if (goalTest(node.getState())){
@@ -71,6 +81,11 @@ public class UninformedAgent extends Agent{
         }
     }
 
+    /**
+     * methode permetant d'étendre la frontier d'exploration
+     * @param parent node initial de l'extention
+     * @return liste de node
+     */
     protected List<Node> expend(Node parent){
         List<Node> successors = new ArrayList<>();
 
@@ -86,6 +101,13 @@ public class UninformedAgent extends Agent{
         return successors;
     }
 
+    /**
+     * calcul du coup d'un node donnée à partir de son parent et de l'action associée
+     * @param parent parent du node
+     * @param action action associé au node
+     * @param node node dont le coût est à déterminer
+     * @return valeur du coût
+     */
     protected int stepCost(Node parent, Action action, Node node) {
         return 1;
     }

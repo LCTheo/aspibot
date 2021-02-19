@@ -31,7 +31,7 @@ public class Display {
     private JPanel pan_score;
 
     //Panel pour afficher les boutons de gestion
-    private JPanel pan_buttons;
+    private JFrame frame;
 
     //Panel footer
     private JPanel south = new JPanel();
@@ -51,21 +51,9 @@ public class Display {
     //TextArea pour afficher les labels des différents évènements générés par l'environnement
     private JTextArea eventlabel;
 
-    //Boutons pour gérer l'interface graphique
-    private JButton start_stop;
-    private JButton agentChange;
-    private JButton reset;
-
-
-
     private final ImageIcon dust;
     private final ImageIcon jewel;
     private final ImageIcon vacuum;
-    private boolean started;
-    private Environment environment;
-    private Agent informedAgent;
-    private Agent uninformedAgent;
-    private Agent currentAgent;
 
     /**
     * Constructeur de la classe
@@ -82,7 +70,7 @@ public class Display {
         this.vacuum = new ImageIcon(aspibotImg);
 
         //Création de la fenetre principale
-        JFrame frame = new JFrame();
+        frame = new JFrame();
         this.panel = new JPanel();
         //Création d'une bordure pour délimiter les cases.
         Border border = BorderFactory.createLineBorder(Color.black,2);
@@ -175,9 +163,11 @@ public class Display {
     /**
      * Initialise l'affichage de l'agent
      * @param environment : instance de l'environnement pour récupérer la position initiale donnée par l'agent
+     * @param agentType : type d'agent utilisé
      */
-    public static void init(Environment environment) {
+    public static void init(Environment environment, String agentType) {
        render(Event.initpos, environment.getAgentPosition());
+       display.frame.setTitle("Aspibot : "+agentType+" agent");
 
     }
 
@@ -226,12 +216,14 @@ public class Display {
         } else if (event.equals(Event.clean)){
             JPanel panel = display.tab_panels[position.getX()][position.getY()];
             //Affichage de l'évènement
-            display.eventlabel.append("Nettoyage d'une poussière en: \t"+position.getX()+", "+position.getY()+"\n");
+            display.eventlabel.append("Nettoyage de la pièce en: \t"+position.getX()+", "+position.getY()+"\n");
             //Mise à jour du score
             display.score++;
             //display.scorelabel.setText(Integer.toString(display.score));
             //Mise à jour de l'affichage
-            JLabel label = (JLabel) panel.getComponent(0);
+            JLabel label = (JLabel) panel.getComponent(1);
+            label.setIcon(null);
+            label = (JLabel) panel.getComponent(0);
             label.setIcon(null);
             //Evenement pour supprimer la position de l'agent sur une case donnée
         } else if (event.equals(Event.delBot)){
